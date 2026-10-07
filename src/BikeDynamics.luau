@@ -1741,7 +1741,6 @@ end
 ]=]
 function BikeDynamics:_updateContact(wheel, frameCFrame, center, wheelVelocity, deltaTime)
 	local hit, axisWorld, mountWorld, normal = self:_probe(wheel, frameCFrame)
-	local telemetry = wheel.telemetry
 	local contact = wheel.contact
 
 	wheel.probeNormal = hit and normal or nil
@@ -1768,14 +1767,14 @@ function BikeDynamics:_updateContact(wheel, frameCFrame, center, wheelVelocity, 
 				-- from the same edge). Flat and evenly sloped ground stay
 				-- exactly as they are.
 				local castChange = sweptHit.Distance - hit.Distance
-				local approach = travelStep:Dot(normal)
+				local normalStep = travelStep:Dot(normal)
 				local alongAxis = normal:Dot(axisWorld)
-				local planeChange = approach / math.max(alongAxis, EPSILON)
+				local planeChange = normalStep / math.max(alongAxis, EPSILON)
 				local swept = nil
 
 				if castChange < planeChange - EPSILON then
 					-- Rising ahead: lean back along the travel on the contact plane.
-					local inPlane = travelStep - normal * approach
+					local inPlane = travelStep - normal * normalStep
 					local inPlaneLength = inPlane.Magnitude
 
 					if inPlaneLength > EPSILON then
@@ -1783,18 +1782,18 @@ function BikeDynamics:_updateContact(wheel, frameCFrame, center, wheelVelocity, 
 						local denominator = inPlaneLength - castChange * axisWorld:Dot(along)
 
 						if denominator > EPSILON then
-							local lean = (castChange * alongAxis - approach) / denominator
+							local lean = (castChange * alongAxis - normalStep) / denominator
 
 							swept = (normal + along * math.min(lean, 0)).Unit
 						end
 					end
-				elseif approach < 0 then
+				elseif normalStep < 0 then
 					-- Edge cleared within the frame: blend toward the end normal.
 					local turn = sweptNormal - normal
 					local denominator = travelStep:Dot(turn) - castChange * axisWorld:Dot(turn)
 
 					if math.abs(denominator) > EPSILON then
-						local blend = clamp((castChange * alongAxis - approach) / denominator, 0, 1)
+						local blend = clamp((castChange * alongAxis - normalStep) / denominator, 0, 1)
 
 						swept = (normal + turn * blend).Unit
 					end
@@ -2602,8 +2601,8 @@ function BikeDynamics:step(deltaTime, controls)
 				-- force. Its valve drops the pressure while the tire is past its
 				-- peak (so the tire spins the wheel back up) and builds it back
 				-- once the tire grips again.
-				local axleOffset = offset + normal * wheel.radius
-				local axleSpeed = (velocity + angularVelocity:Cross(axleOffset) - contact.groundVelocity):Dot(tangent)
+				local patchAxle = offset + normal * wheel.radius
+				local axleSpeed = (velocity + angularVelocity:Cross(patchAxle) - contact.groundVelocity):Dot(tangent)
 
 				contact.absActive = absEnabled and math.abs(axleSpeed) > absMinimumSpeed
 				contact.absFriction = friction * absForceShare

@@ -312,7 +312,7 @@ physicsConnection = RunService.PreSimulation:Connect(function(deltaTime)
 	end
 end)
 
-local inputConnection = inputEvent.Event:Connect(function(action, value)
+local inputConnection = inputEvent.Event:Connect(function(action)
 	if action == "ShiftUp" then
 		rider:shiftUp()
 	elseif action == "ShiftDown" then

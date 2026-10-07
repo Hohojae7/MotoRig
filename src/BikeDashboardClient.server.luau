@@ -1148,9 +1148,12 @@ end
 
 -- The point (screen pixels, as touches report it) is on the object.
 local function inside(object, point)
-	local corner, size = object.AbsolutePosition, object.AbsoluteSize
+	local topLeft, size = object.AbsolutePosition, object.AbsoluteSize
 
-	return point.X >= corner.X and point.Y >= corner.Y and point.X <= corner.X + size.X and point.Y <= corner.Y + size.Y
+	return point.X >= topLeft.X
+		and point.Y >= topLeft.Y
+		and point.X <= topLeft.X + size.X
+		and point.Y <= topLeft.Y + size.Y
 end
 
 -- The touch controls are up: a touch screen that is the input in use (a
@@ -1586,9 +1589,9 @@ local function publishLeanArea(touch, up)
 	local rect = nil
 
 	if up then
-		local corner, size = lean.area.AbsolutePosition, lean.area.AbsoluteSize
+		local topLeft, size = lean.area.AbsolutePosition, lean.area.AbsoluteSize
 
-		rect = Rect.new(corner.X, corner.Y, corner.X + size.X, corner.Y + size.Y)
+		rect = Rect.new(topLeft.X, topLeft.Y, topLeft.X + size.X, topLeft.Y + size.Y)
 	end
 
 	if rect ~= lean.published then
@@ -1616,8 +1619,8 @@ local function updateTouch(touch, status)
 	if status.scale ~= touch.shownScale then
 		touch.shownScale = status.scale
 
-		for _, uiScale in touch.scales do
-			uiScale.Scale = status.scale
+		for _, scaleObject in touch.scales do
+			scaleObject.Scale = status.scale
 		end
 
 		-- The gear buttons sit above the lean pad's place, which scales too.
