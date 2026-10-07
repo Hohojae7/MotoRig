@@ -1,3 +1,5 @@
 # Tools for this project, managed by Aftman (https://github.com/LPGhatguy/aftman).
 [tools]
 rojo = "rojo-rbx/rojo@7.7.0"
+selene = "Kampfkarren/selene@0.32.0"
+stylua = "JohnnyMorganz/StyLua@2.5.0"
