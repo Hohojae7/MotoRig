@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Installs the tools pinned in aftman.toml (Rojo, Selene, StyLua).
+      - uses: ok-nick/setup-aftman@v0.4.2
+
+      - name: Lint (Selene)
+        run: selene src
+
+      - name: Check formatting (StyLua)
+        run: stylua --check src
+
+      - name: Build (Rojo)
+        run: rojo build MotoRig.project.json -o "$RUNNER_TEMP/MotoRig.rbxm"
+
+      - name: Check MotoRig.rbxm is up to date
+        run: |
+          if ! cmp -s MotoRig.rbxm "$RUNNER_TEMP/MotoRig.rbxm"; then
+            echo "::error file=MotoRig.rbxm::MotoRig.rbxm does not match src/ and parts/. Run 'rojo build MotoRig.project.json -o MotoRig.rbxm' and commit the result."
+            exit 1
+          fi

@@ -159,13 +159,15 @@ function RemoteBike:attached()
 		return false
 	end
 
-	for _, joint in {
-		visualRig.front.joint,
-		visualRig.rear.joint,
-		visualRig.forkJoint,
-		visualRig.steerJoint,
-		visualRig.swingarmJoint,
-	} do
+	for _, joint in
+		{
+			visualRig.front.joint,
+			visualRig.rear.joint,
+			visualRig.forkJoint,
+			visualRig.steerJoint,
+			visualRig.swingarmJoint,
+		}
+	do
 		if joint and not (joint:IsDescendantOf(bike) and joint.Part1 and joint.Part1:IsDescendantOf(bike)) then
 			return false
 		end
@@ -247,8 +249,10 @@ function RemoteBike:_followEngine(target, deltaTime)
 
 	local response = self.config.Response
 
-	self.engineRPM = self.engineRPM and approach(self.engineRPM, target.engineRPM, response, deltaTime) or target.engineRPM
-	self.engineThrottle = self.engineThrottle and approach(self.engineThrottle, target.throttle or 0, response, deltaTime)
+	self.engineRPM = self.engineRPM and approach(self.engineRPM, target.engineRPM, response, deltaTime)
+		or target.engineRPM
+	self.engineThrottle = self.engineThrottle
+			and approach(self.engineThrottle, target.throttle or 0, response, deltaTime)
 		or target.throttle
 		or 0
 	self.gear = target.gear

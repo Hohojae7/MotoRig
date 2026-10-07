@@ -439,7 +439,8 @@ function BikeCamera:update(deltaTime, view)
 
 	deltaTime = math.max(deltaTime, 0)
 
-	if self.lastFocus == nil
+	if
+		self.lastFocus == nil
 		or (focus - self.lastFocus).Magnitude > velocity.Magnitude * deltaTime + TELEPORT_DISTANCE
 	then
 		self:reset(view)
@@ -498,12 +499,8 @@ function BikeCamera:update(deltaTime, view)
 		* CFrame.Angles(0, self.orbitYaw + (self.lookBack and math.pi or 0), 0)
 		* CFrame.Angles(pitch, 0, 0)
 
-	self.fieldOfView = approach(
-		self.fieldOfView,
-		self:_fieldOfViewTarget(velocity, helmet),
-		FIELD_OF_VIEW_RESPONSE,
-		deltaTime
-	)
+	self.fieldOfView =
+		approach(self.fieldOfView, self:_fieldOfViewTarget(velocity, helmet), FIELD_OF_VIEW_RESPONSE, deltaTime)
 
 	-- The boom swings with the bike's speed change along the view.
 	local along = horizontal(rotation.LookVector)

@@ -65,7 +65,9 @@ for _, name in { "BikeMassDiagnostics", "BikeMassExperiment" } do
 end
 
 for _, descendant in bike:GetDescendants() do
-	if descendant:IsA("BasePart") and (descendant.Name == "BikeMassBallast" or descendant.Name == "MassTestBallast") then
+	if
+		descendant:IsA("BasePart") and (descendant.Name == "BikeMassBallast" or descendant.Name == "MassTestBallast")
+	then
 		descendant:Destroy()
 	end
 end
@@ -376,13 +378,15 @@ setStatus("ready")
 
 -- One line per bike in the Output for development (config.Diagnostics).
 if config.Diagnostics and config.Diagnostics.Enabled then
-	print(string.format(
-		"[BikeServer] raycast rig ready | mass=%.3f | wheelbase=%.3f | rake=%.1f | front/rear static load=%.1f/%.1f | exterior=%d parts",
-		dynamics.mass,
-		dynamics.wheelbase,
-		math.deg(dynamics.rake),
-		dynamics.front.staticLoad,
-		dynamics.rear.staticLoad,
-		bike:GetAttribute(BikeDynamics.Names.ExteriorAttribute) or 0
-	))
+	print(
+		string.format(
+			"[BikeServer] raycast rig ready | mass=%.3f | wheelbase=%.3f | rake=%.1f | front/rear static load=%.1f/%.1f | exterior=%d parts",
+			dynamics.mass,
+			dynamics.wheelbase,
+			math.deg(dynamics.rake),
+			dynamics.front.staticLoad,
+			dynamics.rear.staticLoad,
+			bike:GetAttribute(BikeDynamics.Names.ExteriorAttribute) or 0
+		)
+	)
 end

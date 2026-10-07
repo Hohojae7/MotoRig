@@ -213,17 +213,19 @@ local function publishHud(deltaTime)
 
 	if driveState ~= lastDriveState and diagnostics then
 		lastDriveState = driveState
-		print(string.format(
-			"[BikeDriveState] %s | gear=%s | speed=%.2f | rpm=%.0f | wheel torque=%.1f | traction=%.2f | lean=%.1f (shown %.1f)",
-			driveState,
-			gear == 0 and "N" or gear < 0 and "R" or tostring(gear),
-			state.forwardSpeed,
-			state.engineRPM,
-			state.wheelDriveTorque,
-			rider.tractionScale,
-			math.deg(state.lean),
-			math.deg(state.leanCommand)
-		))
+		print(
+			string.format(
+				"[BikeDriveState] %s | gear=%s | speed=%.2f | rpm=%.0f | wheel torque=%.1f | traction=%.2f | lean=%.1f (shown %.1f)",
+				driveState,
+				gear == 0 and "N" or gear < 0 and "R" or tostring(gear),
+				state.forwardSpeed,
+				state.engineRPM,
+				state.wheelDriveTorque,
+				rider.tractionScale,
+				math.deg(state.lean),
+				math.deg(state.leanCommand)
+			)
+		)
 	end
 end
 
@@ -232,9 +234,7 @@ local function isDriver()
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 
-	return humanoid ~= nil
-		and seat.Occupant == humanoid
-		and bike:GetAttribute("BikeDriverUserId") == player.UserId
+	return humanoid ~= nil and seat.Occupant == humanoid and bike:GetAttribute("BikeDriverUserId") == player.UserId
 end
 
 -- One physics frame: rider controls, dynamics, visuals, pose, sound, HUD.
@@ -312,7 +312,7 @@ physicsConnection = RunService.PreSimulation:Connect(function(deltaTime)
 	end
 end)
 
-local inputConnection = inputEvent.Event:Connect(function(action, value)
+local inputConnection = inputEvent.Event:Connect(function(action)
 	if action == "ShiftUp" then
 		rider:shiftUp()
 	elseif action == "ShiftDown" then
