@@ -382,7 +382,8 @@ function BikeSound:_afterfire(deltaTime, running, rpm, throttle, soundRPM)
 
 	local drivetrain = self.drivetrain
 
-	if rpm < drivetrain.RevLimitRPM * (sound.PopRevShare or 1)
+	if
+		rpm < drivetrain.RevLimitRPM * (sound.PopRevShare or 1)
 		or not popsInGear(sound, self.gear)
 		or self.random() >= (sound.PopChance or 0)
 	then

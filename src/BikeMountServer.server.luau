@@ -15,10 +15,7 @@ if attachment == nil then
 	attachment.Parent = vehicleSeat
 end
 
-assert(
-	attachment:IsA("Attachment"),
-	"BikeMountPromptAttachment must be an Attachment"
-)
+assert(attachment:IsA("Attachment"), "BikeMountPromptAttachment must be an Attachment")
 
 local prompt = attachment:FindFirstChild("BikeMountPrompt")
 
@@ -28,10 +25,7 @@ if prompt == nil then
 	prompt.Parent = attachment
 end
 
-assert(
-	prompt:IsA("ProximityPrompt"),
-	"BikeMountPrompt must be a ProximityPrompt"
-)
+assert(prompt:IsA("ProximityPrompt"), "BikeMountPrompt must be a ProximityPrompt")
 
 prompt.ActionText = promptSettings.ActionText or "Ride"
 prompt.ObjectText = promptSettings.ObjectText or "Motorcycle"

@@ -412,15 +412,18 @@ end
 
 local connections = {}
 
-table.insert(connections, RunService.PreRender:Connect(function(deltaTime)
-	local ran, problem = pcall(onRender, deltaTime)
+table.insert(
+	connections,
+	RunService.PreRender:Connect(function(deltaTime)
+		local ran, problem = pcall(onRender, deltaTime)
 
-	if not ran then
-		-- Roblox's camera for the rest of this ride, instead of repeating
-		-- the error every frame.
-		standDown(tostring(problem), true)
-	end
-end))
+		if not ran then
+			-- Roblox's camera for the rest of this ride, instead of repeating
+			-- the error every frame.
+			standDown(tostring(problem), true)
+		end
+	end)
+)
 
 -- A text box (the chat) has focus.
 local function typing()
@@ -450,90 +453,99 @@ end
 
 -- Input over the GUI (processed) does not turn or zoom the view; keys are
 -- read whatever else uses them, except while typing.
-table.insert(connections, UserInputService.InputBegan:Connect(function(input, processed)
-	if taken == nil then
-		return
-	end
-
-	local inputType = input.UserInputType
-	local keyCode = input.KeyCode
-
-	if inputType == Enum.UserInputType.MouseButton2 then
-		if not processed then
-			lookButton = true
-			UserInputService.MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
-			bikeCamera:holdLook(true)
+table.insert(
+	connections,
+	UserInputService.InputBegan:Connect(function(input, processed)
+		if taken == nil then
+			return
 		end
-	elseif inputType == Enum.UserInputType.Touch then
-		if not processed and not inLeanArea(input.Position) then
-			touches[input] = true
-			bikeCamera:holdLook(true)
+
+		local inputType = input.UserInputType
+		local keyCode = input.KeyCode
+
+		if inputType == Enum.UserInputType.MouseButton2 then
+			if not processed then
+				lookButton = true
+				UserInputService.MouseBehavior = Enum.MouseBehavior.LockCurrentPosition
+				bikeCamera:holdLook(true)
+			end
+		elseif inputType == Enum.UserInputType.Touch then
+			if not processed and not inLeanArea(input.Position) then
+				touches[input] = true
+				bikeCamera:holdLook(true)
+			end
+		elseif typing() then
+			return
+		elseif keyCode == Enum.KeyCode.V or keyCode == Enum.KeyCode.ButtonY then
+			bikeCamera:toggleView()
+		elseif isLookBack(keyCode) then
+			bikeCamera:setLookBack(true)
+		elseif keyCode == Enum.KeyCode.I then
+			bikeCamera:zoomIn(1)
+		elseif keyCode == Enum.KeyCode.O then
+			bikeCamera:zoomIn(-1)
 		end
-	elseif typing() then
-		return
-	elseif keyCode == Enum.KeyCode.V or keyCode == Enum.KeyCode.ButtonY then
-		bikeCamera:toggleView()
-	elseif isLookBack(keyCode) then
-		bikeCamera:setLookBack(true)
-	elseif keyCode == Enum.KeyCode.I then
-		bikeCamera:zoomIn(1)
-	elseif keyCode == Enum.KeyCode.O then
-		bikeCamera:zoomIn(-1)
-	end
-end))
+	end)
+)
 
-table.insert(connections, UserInputService.InputEnded:Connect(function(input)
-	if taken == nil then
-		return
-	end
-
-	local inputType = input.UserInputType
-
-	if inputType == Enum.UserInputType.MouseButton2 then
-		if lookButton then
-			lookButton = false
-			UserInputService.MouseBehavior = Enum.MouseBehavior.Default
-			bikeCamera:holdLook(next(touches) ~= nil)
+table.insert(
+	connections,
+	UserInputService.InputEnded:Connect(function(input)
+		if taken == nil then
+			return
 		end
-	elseif inputType == Enum.UserInputType.Touch then
-		if touches[input] then
-			touches[input] = nil
-			bikeCamera:holdLook(lookButton or next(touches) ~= nil)
+
+		local inputType = input.UserInputType
+
+		if inputType == Enum.UserInputType.MouseButton2 then
+			if lookButton then
+				lookButton = false
+				UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+				bikeCamera:holdLook(next(touches) ~= nil)
+			end
+		elseif inputType == Enum.UserInputType.Touch then
+			if touches[input] then
+				touches[input] = nil
+				bikeCamera:holdLook(lookButton or next(touches) ~= nil)
+			end
+		elseif isLookBack(input.KeyCode) then
+			bikeCamera:setLookBack(false)
 		end
-	elseif isLookBack(input.KeyCode) then
-		bikeCamera:setLookBack(false)
-	end
-end))
+	end)
+)
 
-table.insert(connections, UserInputService.InputChanged:Connect(function(input, processed)
-	if taken == nil then
-		return
-	end
-
-	local inputType = input.UserInputType
-
-	if inputType == Enum.UserInputType.MouseMovement then
-		if lookButton then
-			local scale, invert = mouseScale()
-
-			bikeCamera:look(-input.Delta.X * scale, -input.Delta.Y * scale * invert)
+table.insert(
+	connections,
+	UserInputService.InputChanged:Connect(function(input, processed)
+		if taken == nil then
+			return
 		end
-	elseif inputType == Enum.UserInputType.MouseWheel then
-		if not processed then
-			bikeCamera:zoomIn(input.Position.Z)
-		end
-	elseif inputType == Enum.UserInputType.Touch then
-		if touches[input] then
-			local scale, invert = mouseScale()
 
-			bikeCamera:look(-input.Delta.X * scale * TOUCH_SCALE, -input.Delta.Y * scale * invert * TOUCH_SCALE)
-		end
-	elseif input.KeyCode == Enum.KeyCode.Thumbstick2 then
-		local position = Vector2.new(input.Position.X, input.Position.Y)
+		local inputType = input.UserInputType
 
-		stick = position.Magnitude > STICK_DEADZONE and position or Vector2.zero
-	end
-end))
+		if inputType == Enum.UserInputType.MouseMovement then
+			if lookButton then
+				local scale, invert = mouseScale()
+
+				bikeCamera:look(-input.Delta.X * scale, -input.Delta.Y * scale * invert)
+			end
+		elseif inputType == Enum.UserInputType.MouseWheel then
+			if not processed then
+				bikeCamera:zoomIn(input.Position.Z)
+			end
+		elseif inputType == Enum.UserInputType.Touch then
+			if touches[input] then
+				local scale, invert = mouseScale()
+
+				bikeCamera:look(-input.Delta.X * scale * TOUCH_SCALE, -input.Delta.Y * scale * invert * TOUCH_SCALE)
+			end
+		elseif input.KeyCode == Enum.KeyCode.Thumbstick2 then
+			local position = Vector2.new(input.Position.X, input.Position.Y)
+
+			stick = position.Magnitude > STICK_DEADZONE and position or Vector2.zero
+		end
+	end)
+)
 
 -- The bike's touch controls (BikeDashboardClient, or a map's own) work the
 -- view through local attributes on the bike: a press counter for the view
@@ -550,24 +562,30 @@ end
 
 local viewPresses = touchCount()
 
-table.insert(connections, bike:GetAttributeChangedSignal(TOUCH_VIEW):Connect(function()
-	local count = touchCount()
-	local pressed = count > viewPresses
+table.insert(
+	connections,
+	bike:GetAttributeChangedSignal(TOUCH_VIEW):Connect(function()
+		local count = touchCount()
+		local pressed = count > viewPresses
 
-	viewPresses = count
+		viewPresses = count
 
-	if pressed and taken then
-		bikeCamera:toggleView()
-	end
-end))
+		if pressed and taken then
+			bikeCamera:toggleView()
+		end
+	end)
+)
 
-table.insert(connections, bike:GetAttributeChangedSignal(TOUCH_LOOK_BACK):Connect(function()
-	local value = bike:GetAttribute(TOUCH_LOOK_BACK)
+table.insert(
+	connections,
+	bike:GetAttributeChangedSignal(TOUCH_LOOK_BACK):Connect(function()
+		local value = bike:GetAttribute(TOUCH_LOOK_BACK)
 
-	if taken then
-		bikeCamera:setLookBack(type(value) == "number" and value > 0)
-	end
-end))
+		if taken then
+			bikeCamera:setLookBack(type(value) == "number" and value > 0)
+		end
+	end)
+)
 
 script.Destroying:Connect(function()
 	for _, connection in connections do

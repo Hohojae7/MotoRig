@@ -220,9 +220,7 @@ local function rotateAroundAxis(vector, axis, angle)
 	local cosine = math.cos(angle)
 	local sine = math.sin(angle)
 
-	return vector * cosine
-		+ axis:Cross(vector) * sine
-		+ axis * (axis:Dot(vector) * (1 - cosine))
+	return vector * cosine + axis:Cross(vector) * sine + axis * (axis:Dot(vector) * (1 - cosine))
 end
 
 -- 3x3 matrices are row-major arrays of 9 numbers.
@@ -774,14 +772,16 @@ function BikeDynamics.buildRig(bike, config)
 		end
 	end
 
-	for _, name in {
-		NAMES.RollAttachment,
-		NAMES.UprightAttachment,
-		NAMES.FrontContact,
-		NAMES.RearContact,
-		NAMES.AeroAttachment,
-		NAMES.TorqueAttachment,
-	} do
+	for _, name in
+		{
+			NAMES.RollAttachment,
+			NAMES.UprightAttachment,
+			NAMES.FrontContact,
+			NAMES.RearContact,
+			NAMES.AeroAttachment,
+			NAMES.TorqueAttachment,
+		}
+	do
 		local stale = frame:FindFirstChild(name)
 
 		if stale then
@@ -863,11 +863,13 @@ function BikeDynamics.buildRig(bike, config)
 		local density = mass / math.max(volume, EPSILON)
 
 		if density > 100 or density < 0.0001 then
-			warn(string.format(
-				"BikeDynamics: %s needs density %.4f outside Roblox limits; mass will differ.",
-				name,
-				density
-			))
+			warn(
+				string.format(
+					"BikeDynamics: %s needs density %.4f outside Roblox limits; mass will differ.",
+					name,
+					density
+				)
+			)
 		end
 
 		part.CustomPhysicalProperties = PhysicalProperties.new(clamp(density, 0.0001, 100), 0, 0)
@@ -1033,14 +1035,16 @@ function BikeDynamics.rigMissing(bike, config)
 		end
 	end
 
-	for _, name in {
-		NAMES.FrontContact,
-		NAMES.RearContact,
-		NAMES.RollAttachment,
-		NAMES.UprightAttachment,
-		NAMES.AeroAttachment,
-		NAMES.TorqueAttachment,
-	} do
+	for _, name in
+		{
+			NAMES.FrontContact,
+			NAMES.RearContact,
+			NAMES.RollAttachment,
+			NAMES.UprightAttachment,
+			NAMES.AeroAttachment,
+			NAMES.TorqueAttachment,
+		}
+	do
 		if frame:FindFirstChild(name) == nil then
 			return name
 		end
@@ -1227,10 +1231,7 @@ function BikeDynamics.new(bike, config, options)
 		false
 	)
 	self.wheels = { self.front, self.rear }
-	self.wheelbase = math.max(
-		math.abs(self.front.restCFrame.Position.Z - self.rear.restCFrame.Position.Z),
-		0.1
-	)
+	self.wheelbase = math.max(math.abs(self.front.restCFrame.Position.Z - self.rear.restCFrame.Position.Z), 0.1)
 
 	-- The visual parts and what they show (BikeDynamics:visualState).
 	self.visualRig = BikeDynamics.VisualRig.new(rig)
@@ -1423,10 +1424,7 @@ function BikeDynamics:_refreshMassProperties()
 	local frontZ = front.restCFrame.Position.Z
 	local rearZ = rear.restCFrame.Position.Z
 	local rearShare = clamp((centerLocal.Z - frontZ) / (rearZ - frontZ), 0.05, 0.95)
-	local groundY = math.min(
-		front.restCFrame.Position.Y - front.radius,
-		rear.restCFrame.Position.Y - rear.radius
-	)
+	local groundY = math.min(front.restCFrame.Position.Y - front.radius, rear.restCFrame.Position.Y - rear.radius)
 
 	self.centerHeight = math.max(centerLocal.Y - groundY, 0.1)
 	self.gravityRollMoment = mass * gravity * self.centerHeight
@@ -1475,20 +1473,20 @@ function BikeDynamics:_refreshMassProperties()
 		local preload = staticForce - rate * wheel.sag
 
 		wheel.tireRate = tireRate
-		wheel.tireDamping = 2
-			* suspensionConfig.TireDampingRatio
-			* math.sqrt(tireRate * wheel.unsprungMass)
+		wheel.tireDamping = 2 * suspensionConfig.TireDampingRatio * math.sqrt(tireRate * wheel.unsprungMass)
 
 		-- A spring stiff enough for the ride frequency may need less force
 		-- than the load to reach the sag (low gravity maps): it cannot pull,
 		-- so the bike just rides a little higher.
 		if preload < 0 and not wheel.preloadWarned and self.config.Diagnostics and self.config.Diagnostics.Enabled then
 			wheel.preloadWarned = true
-			warn(string.format(
-				"BikeDynamics: in this gravity the %s spring settles %.3f studs short of its sag (no preload left); lower Suspension Frequency or SagRatio to change that.",
-				wheel.isFront and "front" or "rear",
-				-preload / math.max(rate, EPSILON)
-			))
+			warn(
+				string.format(
+					"BikeDynamics: in this gravity the %s spring settles %.3f studs short of its sag (no preload left); lower Suspension Frequency or SagRatio to change that.",
+					wheel.isFront and "front" or "rear",
+					-preload / math.max(rate, EPSILON)
+				)
+			)
 		end
 
 		wheel.staticLoad = staticLoad
@@ -1855,10 +1853,7 @@ function BikeDynamics:_updateRider(deltaTime, controls, forwardSpeed, lean, pitc
 
 	-- Three physical limits on the turn the rider can ask for: steering lock
 	-- (walking pace), rider yaw rate (normal riding), tire grip (lean cap).
-	local leanCap = math.min(
-		math.rad(leanConfig.MaxLeanAngle),
-		math.atan(muAvailable * leanConfig.LeanGripUsage)
-	)
+	local leanCap = math.min(math.rad(leanConfig.MaxLeanAngle), math.atan(muAvailable * leanConfig.LeanGripUsage))
 	local wheelbase = self.wheelbase
 	local maxSteer = math.rad(steeringConfig.MaxGroundSteerAngle)
 	local maxSteerRate = math.rad(leanConfig.MaxSteerRate)
@@ -1904,12 +1899,8 @@ function BikeDynamics:_updateRider(deltaTime, controls, forwardSpeed, lean, pitc
 	local rawAcceleration = (forwardSpeed - self.lastForwardSpeed) / deltaTime
 
 	self.lastForwardSpeed = forwardSpeed
-	self.forwardAcceleration = approach(
-		self.forwardAcceleration,
-		rawAcceleration,
-		ACCELERATION_FILTER_RESPONSE,
-		deltaTime
-	)
+	self.forwardAcceleration =
+		approach(self.forwardAcceleration, rawAcceleration, ACCELERATION_FILTER_RESPONSE, deltaTime)
 
 	local acceleration = self.forwardAcceleration
 
@@ -1918,9 +1909,8 @@ function BikeDynamics:_updateRider(deltaTime, controls, forwardSpeed, lean, pitc
 	-- Steady-turn lean for the requested path including the gyroscopic
 	-- moment of the wheels: m g h sin(roll) = m a h cos(roll) + H r with
 	-- a = v^2 k and r = v k.
-	local leanTarget = math.atan(
-		(speedSquared * curvatureInput + spinMomentum * speed * curvatureInput / (mass * height)) / gravity
-	)
+	local leanTarget =
+		math.atan((speedSquared * curvatureInput + spinMomentum * speed * curvatureInput / (mass * height)) / gravity)
 
 	leanTarget = clamp(leanTarget, -leanCap, leanCap)
 
@@ -1973,11 +1963,8 @@ function BikeDynamics:_updateRider(deltaTime, controls, forwardSpeed, lean, pitc
 		end
 	end
 
-	local newSteer = moveToward(
-		steer,
-		steerByHand + (steerByBalance - steerByHand) * balanceWeight,
-		maxSteerRate * deltaTime
-	)
+	local newSteer =
+		moveToward(steer, steerByHand + (steerByBalance - steerByHand) * balanceWeight, maxSteerRate * deltaTime)
 	local steerRate = (newSteer - steer) / deltaTime
 	local tanSteer = math.tan(newSteer)
 
@@ -2136,8 +2123,7 @@ function BikeDynamics:_updateAlignTarget(frameCFrame)
 	local referenceUp = safeUnit(WORLD_UP - forward * forward:Dot(WORLD_UP), frameCFrame.UpVector)
 	local referenceRight = forward:Cross(referenceUp)
 
-	self.align.PrimaryAxis = referenceUp * math.cos(self.leanCommand)
-		- referenceRight * math.sin(self.leanCommand)
+	self.align.PrimaryAxis = referenceUp * math.cos(self.leanCommand) - referenceRight * math.sin(self.leanCommand)
 end
 
 -- Course rate, body slip angle and path radius from the velocity.
@@ -2236,7 +2222,10 @@ function BikeDynamics:step(deltaTime, controls)
 
 	if self.leanOffset ~= 0 then
 		-- Turning about the forward axis by +a lowers the lean by a.
-		frameCFrame = CFrame.new(center) * CFrame.fromAxisAngle(look, self.leanOffset) * CFrame.new(-center) * bodyCFrame
+		frameCFrame = CFrame.new(center)
+			* CFrame.fromAxisAngle(look, self.leanOffset)
+			* CFrame.new(-center)
+			* bodyCFrame
 	end
 
 	local flatForward = safeUnit(Vector3.new(look.X, 0, look.Z), self.lastFlatForward)
@@ -2430,8 +2419,7 @@ function BikeDynamics:step(deltaTime, controls)
 			damping = wheel.dampingBump
 
 			if wheel.strokeRate > knee then
-				damping *= (knee + suspensionConfig.HighSpeedDampingRatio * (wheel.strokeRate - knee))
-					/ wheel.strokeRate
+				damping *= (knee + suspensionConfig.HighSpeedDampingRatio * (wheel.strokeRate - knee)) / wheel.strokeRate
 			end
 		end
 
@@ -2510,11 +2498,8 @@ function BikeDynamics:step(deltaTime, controls)
 			if contact.hasTire then
 				local lateral = normal:Cross(tangent)
 				local camber = math.asin(clamp(frameCFrame.RightVector:Dot(normal), -1, 1))
-				local referenceSpeed = math.max(
-					math.abs(relative:Dot(tangent)),
-					math.abs(wheel.omega * wheel.radius),
-					slipFloor
-				)
+				local referenceSpeed =
+					math.max(math.abs(relative:Dot(tangent)), math.abs(wheel.omega * wheel.radius), slipFloor)
 				-- The spring force this frame is the tire load estimate.
 				local load = math.max(normalForce, EPSILON)
 				local loadImpulse = load * deltaTime
@@ -2522,8 +2507,7 @@ function BikeDynamics:step(deltaTime, controls)
 				-- Load sensitivity: friction and stiffness per unit load fall as
 				-- the tire is loaded beyond its static load.
 				local extraLoad = load / math.max(wheel.staticLoad, EPSILON) - 1
-				local friction = contact.friction
-					* clamp(1 - tireConfig.FrictionLoadSensitivity * extraLoad, 0.5, 1.5)
+				local friction = contact.friction * clamp(1 - tireConfig.FrictionLoadSensitivity * extraLoad, 0.5, 1.5)
 				local stiffnessScale = clamp(1 - tireConfig.StiffnessLoadSensitivity * extraLoad, 0.5, 1.5)
 				local longitudinalStiffness = tireConfig.LongitudinalStiffness * stiffnessScale
 				local corneringStiffness = tireConfig.CorneringStiffness * stiffnessScale
@@ -2626,10 +2610,8 @@ function BikeDynamics:step(deltaTime, controls)
 
 				if contact.absActive and wheel.brakeTorque > 0 then
 					if combinedSlip > 1 and wheel.slipRatio * axleSpeed < 0 then
-						wheel.absPressure = math.max(
-							wheel.absPressure - ABS_DUMP_RATE * (combinedSlip - 1) * deltaTime,
-							0
-						)
+						wheel.absPressure =
+							math.max(wheel.absPressure - ABS_DUMP_RATE * (combinedSlip - 1) * deltaTime, 0)
 					else
 						wheel.absPressure = math.min(wheel.absPressure + ABS_BUILD_RATE * deltaTime, 1)
 					end
@@ -2685,11 +2667,8 @@ function BikeDynamics:step(deltaTime, controls)
 	for _ = 1, iterations do
 		if limiterLimit > 0 then
 			-- Rev limiter: crank speed at most the limit, by cutting fuel.
-			local accumulated = clamp(
-				engine.limitLambda + (engine.limitOmega - engine.omega) * engineInertia,
-				-limiterLimit,
-				0
-			)
+			local accumulated =
+				clamp(engine.limitLambda + (engine.limitOmega - engine.omega) * engineInertia, -limiterLimit, 0)
 
 			engine.omega += (accumulated - engine.limitLambda) / engineInertia
 			engine.limitLambda = accumulated
@@ -2697,11 +2676,8 @@ function BikeDynamics:step(deltaTime, controls)
 
 		if idleLimit > 0 then
 			-- Idle control: crank speed at least idle.
-			local accumulated = clamp(
-				engine.idleLambda + (engine.idleOmega - engine.omega) * engineInertia,
-				0,
-				idleLimit
-			)
+			local accumulated =
+				clamp(engine.idleLambda + (engine.idleOmega - engine.omega) * engineInertia, 0, idleLimit)
 
 			engine.omega += (accumulated - engine.idleLambda) / engineInertia
 			engine.idleLambda = accumulated
@@ -2740,11 +2716,8 @@ function BikeDynamics:step(deltaTime, controls)
 
 			if wheel.driveTorque > 0 then
 				local limit = wheel.driveTorque * deltaTime
-				local accumulated = clamp(
-					wheel.driveLambda + (wheel.driveTarget - wheel.omega) * spinInertia,
-					-limit,
-					limit
-				)
+				local accumulated =
+					clamp(wheel.driveLambda + (wheel.driveTarget - wheel.omega) * spinInertia, -limit, limit)
 
 				wheel.omega += (accumulated - wheel.driveLambda) / spinInertia
 				wheel.driveLambda = accumulated
@@ -2767,10 +2740,12 @@ function BikeDynamics:step(deltaTime, controls)
 
 				if contact.active and contact.hasTire and contact.absActive then
 					local available = contact.absFriction * contact.lambdaNormal
-					local longitudinal = math.sqrt(math.max(
-						available * available - contact.py * contact.py,
-						(ABS_MINIMUM_FORCE_SHARE * available) ^ 2
-					))
+					local longitudinal = math.sqrt(
+						math.max(
+							available * available - contact.py * contact.py,
+							(ABS_MINIMUM_FORCE_SHARE * available) ^ 2
+						)
+					)
 					local absLimit = (longitudinal * wheel.radius + contact.absSpinImpulse) * contact.absScale
 
 					if absLimit < limit then
@@ -2801,10 +2776,7 @@ function BikeDynamics:step(deltaTime, controls)
 				rate -= springDelta * rowInverseMass
 
 				-- Top-out: the stroke cannot go below fully extended.
-				local topped = math.max(
-					wheel.lambdaTop + (-wheel.stroke * inverseStepTime - rate) / rowInverseMass,
-					0
-				)
+				local topped = math.max(wheel.lambdaTop + (-wheel.stroke * inverseStepTime - rate) / rowInverseMass, 0)
 				local topDelta = topped - wheel.lambdaTop
 
 				rate += topDelta * rowInverseMass
@@ -2839,10 +2811,8 @@ function BikeDynamics:step(deltaTime, controls)
 						+ wheel.axialVelocity * contact.axisDot
 						- contact.groundVelocity:Dot(normal)
 					local residual = normalSpeed + contact.normalSoft * contact.lambdaNormal - contact.normalBias
-					local accumulated = math.max(
-						contact.lambdaNormal - residual / (contact.normalInverseMass + contact.normalSoft),
-						0
-					)
+					local accumulated =
+						math.max(contact.lambdaNormal - residual / (contact.normalInverseMass + contact.normalSoft), 0)
 					local delta = accumulated - contact.lambdaNormal
 
 					contact.lambdaNormal = accumulated
@@ -2887,8 +2857,11 @@ function BikeDynamics:step(deltaTime, controls)
 					relative = linear + angular:Cross(offset) - contact.groundVelocity
 
 					local lateralSpeed = relative:Dot(lateral)
-					local deltaY = -(lateralSpeed + contact.softY * (contact.py - contact.camberImpulse) - contact.biasY)
-						/ (contact.inverseMassY + contact.softY)
+					local deltaY = -(
+							lateralSpeed
+							+ contact.softY * (contact.py - contact.camberImpulse)
+							- contact.biasY
+						) / (contact.inverseMassY + contact.softY)
 
 					contact.py += deltaY
 					linear += lateral * (deltaY * inverseMass)
@@ -2979,8 +2952,7 @@ function BikeDynamics:step(deltaTime, controls)
 			local force = axleForce + contact.normalPerp * (contact.lambdaNormal * inverseStep)
 
 			if contact.hasTire then
-				force += contact.tangent * (contact.px * inverseStep)
-					+ contact.lateral * (contact.py * inverseStep)
+				force += contact.tangent * (contact.px * inverseStep) + contact.lateral * (contact.py * inverseStep)
 
 				local relative = linear + angular:Cross(contact.offset) - contact.groundVelocity
 				local longitudinalSpeed = relative:Dot(contact.tangent)
@@ -2988,7 +2960,8 @@ function BikeDynamics:step(deltaTime, controls)
 				telemetry.slipSpeed = wheel.omega * wheel.radius - longitudinalSpeed
 				telemetry.slipRatio = telemetry.slipSpeed / contact.referenceSpeed
 				telemetry.lateralSlip = relative:Dot(contact.lateral)
-				telemetry.slipAngle = math.atan2(telemetry.lateralSlip, math.max(math.abs(longitudinalSpeed), slipFloor))
+				telemetry.slipAngle =
+					math.atan2(telemetry.lateralSlip, math.max(math.abs(longitudinalSpeed), slipFloor))
 				telemetry.camber = contact.camber
 				telemetry.longitudinalForce = contact.px * inverseStep
 
@@ -3116,11 +3089,7 @@ function BikeDynamics:brakeTorques(pressure, rearPressure)
 	local brakeConfig = self.config.Brakes
 	local gravity = math.max(self.world.Gravity, EPSILON)
 	local deceleration = clamp(pressure or 0, 0, 1) * brakeConfig.MaxDeceleration * gravity
-	local frontShare = clamp(
-		(self.rearToCenter + deceleration / gravity * self.centerHeight) / self.wheelbase,
-		0,
-		1
-	)
+	local frontShare = clamp((self.rearToCenter + deceleration / gravity * self.centerHeight) / self.wheelbase, 0, 1)
 	local force = self.mass * deceleration
 	local front = self.front
 	local rear = self.rear
@@ -3250,7 +3219,9 @@ function VisualRig:apply(deltaTime, state)
 
 	local frontDisplacement = front.axis * state.frontTravel
 	local rearDisplacement = rear.axis * state.rearTravel
-	local frontTarget = CFrame.new(frontDisplacement) * front.rest * CFrame.Angles(-front.spinSign * front.spinAngle, 0, 0)
+	local frontTarget = CFrame.new(frontDisplacement)
+		* front.rest
+		* CFrame.Angles(-front.spinSign * front.spinAngle, 0, 0)
 
 	if steer then
 		frontTarget = steer * frontTarget
@@ -3369,7 +3340,8 @@ RiderControls.REVERSE = REVERSE
 -- toward it across HOLD_BAND_SHARE of the rev limit.
 local function holdThrottle(drivetrain, targetRPM, engineRPM)
 	local drag = Powertrain.engineBrakeTorque(drivetrain, targetRPM)
-	local balance = drag / math.max(Powertrain.engineTorque(drivetrain, targetRPM) * drivetrain.Efficiency + drag, EPSILON)
+	local balance = drag
+		/ math.max(Powertrain.engineTorque(drivetrain, targetRPM) * drivetrain.Efficiency + drag, EPSILON)
 
 	return clamp(balance + (targetRPM - engineRPM) / (HOLD_BAND_SHARE * drivetrain.RevLimitRPM), 0, 1)
 end
@@ -3568,7 +3540,8 @@ function RiderControls:_updateGearHelp(deltaTime, throttleInput, brakeInput, run
 		self.gear = 1
 	end
 
-	if self.reverseRatio
+	if
+		self.reverseRatio
 		and running
 		and stopped
 		and throttleClosed
@@ -3680,7 +3653,8 @@ function RiderControls:_updateShift(deltaTime)
 
 	local synced = math.abs(state.engineRPM - targetRPM) < SHIFT_SYNC_SHARE * drivetrain.RevLimitRPM
 
-	if (synced and shift.timer >= drivetrain.ClutchEngageTime)
+	if
+		(synced and shift.timer >= drivetrain.ClutchEngageTime)
 		or shift.timer >= drivetrain.ClutchEngageTime + SHIFT_SYNC_TIMEOUT
 	then
 		self.shift = nil
@@ -3788,7 +3762,8 @@ function RiderControls:update(deltaTime, input)
 	-- Reverse: the throttle closes as the engine nears the reverse rev
 	-- limit and holds it there, far below the limiter.
 	if self.gear == REVERSE then
-		throttle = math.min(throttle, holdThrottle(config.Drivetrain, self.reverseLimitRPM, dynamics.state.engineRPM or 0))
+		throttle =
+			math.min(throttle, holdThrottle(config.Drivetrain, self.reverseLimitRPM, dynamics.state.engineRPM or 0))
 	end
 
 	-- In neutral the clutch is open: the engine revs, the bike stays.

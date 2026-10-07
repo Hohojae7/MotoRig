@@ -411,7 +411,8 @@ function RiderPose:update(deltaTime, dynamics)
 	local chassis = dynamics.frame.CFrame
 	local speed = math.abs(dynamics.state.forwardSpeed or 0)
 
-	self.tuck = approach(self.tuck, smoothstep(config.TuckSpeed, config.TuckFullSpeed, speed), config.Response, deltaTime)
+	self.tuck =
+		approach(self.tuck, smoothstep(config.TuckSpeed, config.TuckFullSpeed, speed), config.Response, deltaTime)
 
 	-- The bike's lean as drawn (positive to the left).
 	local bikeLean = math.asin(math.clamp(chassis.RightVector.Y, -1, 1))
@@ -454,7 +455,15 @@ function RiderPose:update(deltaTime, dynamics)
 			local wrist = grip + (UP + BACK).Unit * self.handOffset
 
 			poseTwoBone(poses, arm, shoulder, wrist, Vector3.new(0.6 * sign, -1, 0.3), true)
-			poseTwoBone(poses, leg, hip, peg + UP * self.ankleHeight, Vector3.new(0.35 * sign, 0.2, -1), false, CFrame.identity)
+			poseTwoBone(
+				poses,
+				leg,
+				hip,
+				peg + UP * self.ankleHeight,
+				Vector3.new(0.35 * sign, 0.2, -1),
+				false,
+				CFrame.identity
+			)
 		else
 			poseOnePart(poses, arm, shoulder, grip)
 			poseOnePart(poses, leg, hip, peg)

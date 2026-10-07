@@ -107,8 +107,7 @@ local function ridingHere()
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local seatPart = humanoid and humanoid.SeatPart
 
-	return bike:GetAttribute("BikeDriverUserId") == player.UserId
-		or (seatPart ~= nil and seatPart:IsDescendantOf(bike))
+	return bike:GetAttribute("BikeDriverUserId") == player.UserId or (seatPart ~= nil and seatPart:IsDescendantOf(bike))
 end
 
 local packetConnection = remote.OnClientEvent:Connect(function(...)

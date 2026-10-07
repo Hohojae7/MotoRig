@@ -263,11 +263,14 @@ end
 table.insert(connections, UserInputService.InputBegan:Connect(onInputBegan))
 table.insert(connections, UserInputService.InputEnded:Connect(onInputEnded))
 table.insert(connections, UserInputService.InputChanged:Connect(onInputChanged))
-table.insert(connections, seat:GetPropertyChangedSignal("Occupant"):Connect(function()
-	if not isLocalRider() then
-		clearInputs()
-	end
-end))
+table.insert(
+	connections,
+	seat:GetPropertyChangedSignal("Occupant"):Connect(function()
+		if not isLocalRider() then
+			clearInputs()
+		end
+	end)
+)
 
 for _, name in TOUCH_HELD do
 	table.insert(connections, bike:GetAttributeChangedSignal(name):Connect(publishInputs))

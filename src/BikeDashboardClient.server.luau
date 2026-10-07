@@ -575,7 +575,14 @@ local function pedal(tile, center, size, ribs)
 	outline(tile, "Plate", plate, size, UDim.new(0, 5), 2.5)
 
 	for index = 1, ribs do
-		bar(tile, "Rib" .. index, plate + Vector2.new(0, (index - (ribs + 1) / 2) * (size.Y - 6) / ribs), size.X - 6, 2, 0)
+		bar(
+			tile,
+			"Rib" .. index,
+			plate + Vector2.new(0, (index - (ribs + 1) / 2) * (size.Y - 6) / ribs),
+			size.X - 6,
+			2,
+			0
+		)
 	end
 
 	bar(tile, "Arm", plate + Vector2.new(0, size.Y / 2 + 6), 8, 3, 90)
@@ -641,7 +648,8 @@ local function ringArc(parent, name, center, radius, thickness, color, transpare
 
 	if from == -to and to >= 45 then
 		-- Even about the top: one cut across the bottom.
-		windows[1] = { center.X - reach, center.Y - reach, center.X + reach, center.Y - radius * math.cos(math.rad(to)) }
+		windows[1] =
+			{ center.X - reach, center.Y - reach, center.X + reach, center.Y - radius * math.cos(math.rad(to)) }
 	else
 		if to > 0 then
 			table.insert(windows, rightArcWindow(center, radius, reach, math.max(from, 0), to))
@@ -749,7 +757,17 @@ local function buildMeter(gui)
 	})
 	local sweepEnd = DIAL_SWEEP / 2
 
-	ringArc(scaleLayer, "RingEdge", center, ringRadius, RING_WIDTH + 2, COLORS.shade, EDGE_TRANSPARENCY, -sweepEnd, sweepEnd)
+	ringArc(
+		scaleLayer,
+		"RingEdge",
+		center,
+		ringRadius,
+		RING_WIDTH + 2,
+		COLORS.shade,
+		EDGE_TRANSPARENCY,
+		-sweepEnd,
+		sweepEnd
+	)
 	ringArc(scaleLayer, "Ring", center, ringRadius, RING_WIDTH, COLORS.white, RING_TRANSPARENCY, -sweepEnd, sweepEnd)
 
 	if redZoneRPM < dialMax then
@@ -1051,7 +1069,8 @@ local function buildControls(gui)
 
 		corner(4).Parent = key
 		padding(5, 0).Parent = key
-		tiles[control.name] = { frame = tile, stroke = stroke, key = key, glyph = glyph, control = control, lit = false }
+		tiles[control.name] =
+			{ frame = tile, stroke = stroke, key = key, glyph = glyph, control = control, lit = false }
 	end
 
 	root.Parent = gui
@@ -1224,14 +1243,16 @@ local function buildTouch(gui)
 		BorderSizePixel = 0,
 		Parent = pad,
 	}, { round() })
-	local trackStroke = create("UIStroke", { Color = COLORS.white, Transparency = 0.75, Thickness = 1.5, Parent = track })
+	local trackStroke =
+		create("UIStroke", { Color = COLORS.white, Transparency = 0.75, Thickness = 1.5, Parent = track })
 
 	-- An arrow at each end, pointing out: lean that way.
 	for index, side in { -1, 1 } do
 		local tip = Vector2.new(LEAN_TRACK.X / 2 + side * (LEAN_TRACK.X / 2 - 16), LEAN_TRACK.Y / 2)
 
 		for arm, sign in { -1, 1 } do
-			local stroke = bar(pad, "Arrow" .. index .. arm, tip + Vector2.new(-side * 3, sign * 3.5), 10, 2.5, -side * sign * 50)
+			local stroke =
+				bar(pad, "Arrow" .. index .. arm, tip + Vector2.new(-side * 3, sign * 3.5), 10, 2.5, -side * sign * 50)
 
 			stroke.BackgroundTransparency = 0.5
 		end
@@ -1272,7 +1293,12 @@ local function buildTouch(gui)
 	}
 
 	local groups = {
-		Left = group("Left", Vector2.new(0, 1), UDim2.new(), Vector2.new(GEAR_BUTTON_SIZE.X, 2 * GEAR_BUTTON_SIZE.Y + GEAR_BUTTON_GAP)),
+		Left = group(
+			"Left",
+			Vector2.new(0, 1),
+			UDim2.new(),
+			Vector2.new(GEAR_BUTTON_SIZE.X, 2 * GEAR_BUTTON_SIZE.Y + GEAR_BUTTON_GAP)
+		),
 		Right = group(
 			"Right",
 			Vector2.new(1, 1),
@@ -1297,7 +1323,8 @@ local function buildTouch(gui)
 		local place = places[spec.name]
 
 		if place == nil then
-			place = { Vector2.new(topCount * (TILE_SIZE + SMALL_BUTTON_GAP), 0), Vector2.new(TILE_SIZE, TILE_SIZE), 10, 1 }
+			place =
+				{ Vector2.new(topCount * (TILE_SIZE + SMALL_BUTTON_GAP), 0), Vector2.new(TILE_SIZE, TILE_SIZE), 10, 1 }
 			topCount += 1
 		end
 
@@ -1313,7 +1340,8 @@ local function buildTouch(gui)
 			Text = "",
 			Parent = groups[spec.group],
 		}, { corner(place[3]) })
-		local stroke = create("UIStroke", { Color = COLORS.white, Transparency = 0.75, Thickness = 1.5, Parent = frame })
+		local stroke =
+			create("UIStroke", { Color = COLORS.white, Transparency = 0.75, Thickness = 1.5, Parent = frame })
 		-- The drawing, in a box like a key tile's, enlarged.
 		local drawing = create("Frame", {
 			Name = "Drawing",
@@ -1593,7 +1621,8 @@ local function updateTouch(touch, status)
 		end
 
 		-- The gear buttons sit above the lean pad's place, which scales too.
-		touch.left.Position = UDim2.new(0, SCREEN_MARGIN, 1, -math.round(SCREEN_MARGIN + (LEAN_TRACK.Y + LEAN_GAP) * status.scale))
+		touch.left.Position =
+			UDim2.new(0, SCREEN_MARGIN, 1, -math.round(SCREEN_MARGIN + (LEAN_TRACK.Y + LEAN_GAP) * status.scale))
 
 		if touch.lean.input == nil then
 			restLeanPad(touch)
