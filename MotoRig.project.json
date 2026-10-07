@@ -1,0 +1,138 @@
+{
+  "name": "MotoRig",
+  "tree": {
+    "$className": "Model",
+    "$ignoreUnknownInstances": true,
+    "$properties": {
+      "WorldPivotData": {
+        "OptionalCFrame": {
+          "position": [-25, -5.29, -12.2425],
+          "orientation": [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
+        }
+      }
+    },
+    "README": {
+      "$path": "src/README.luau"
+    },
+    "Body": {
+      "$path": "parts/Body.rbxmx"
+    },
+    "Wheels": {
+      "$path": "parts/Wheels.rbxmx"
+    },
+    "FrontForkCarrier": {
+      "$path": "parts/FrontForkCarrier.rbxmx"
+    },
+    "VehicleSeat": {
+      "$path": "parts/VehicleSeat.rbxmx"
+    },
+    "BikeConfig": {
+      "$path": "src/BikeConfig.luau",
+      "$properties": {
+        "Sandboxed": false
+      }
+    },
+    "BikeDynamics": {
+      "$path": "src/BikeDynamics.luau",
+      "$properties": {
+        "Sandboxed": false
+      }
+    },
+    "BikeRiderPose": {
+      "$path": "src/BikeRiderPose.luau",
+      "$properties": {
+        "Sandboxed": false
+      }
+    },
+    "BikeVisualSync": {
+      "$path": "src/BikeVisualSync.luau",
+      "$properties": {
+        "Sandboxed": false
+      }
+    },
+    "BikeVisualsClient": {
+      "$path": "src/BikeVisualsClient.server.luau",
+      "$properties": {
+        "Sandboxed": false,
+        "Disabled": false,
+        "RunContext": "Client"
+      }
+    },
+    "BikeCamera": {
+      "$path": "src/BikeCamera.luau",
+      "$properties": {
+        "Sandboxed": false
+      }
+    },
+    "BikeCameraClient": {
+      "$path": "src/BikeCameraClient.server.luau",
+      "$properties": {
+        "Sandboxed": false,
+        "Disabled": false,
+        "RunContext": "Client"
+      }
+    },
+    "BikeSound": {
+      "$path": "src/BikeSound.luau",
+      "$properties": {
+        "Sandboxed": false
+      }
+    },
+    "BikeSoundClient": {
+      "$path": "src/BikeSoundClient.server.luau",
+      "$properties": {
+        "Sandboxed": false,
+        "Disabled": false,
+        "RunContext": "Client"
+      }
+    },
+    "BikeDashboardClient": {
+      "$path": "src/BikeDashboardClient.server.luau",
+      "$properties": {
+        "Sandboxed": false,
+        "Disabled": false,
+        "RunContext": "Client"
+      }
+    },
+    "BikeServer": {
+      "$path": "src/BikeServer.server.luau",
+      "$ignoreUnknownInstances": false,
+      "$properties": {
+        "Sandboxed": false,
+        "Disabled": false
+      },
+      "BikeGuiTemplate": {
+        "$className": "ScreenGui",
+        "$ignoreUnknownInstances": false,
+        "$properties": {
+          "Enabled": true,
+          "ResetOnSpawn": false
+        },
+        "BikeInputEvent": {
+          "$className": "BindableEvent"
+        },
+        "BikeInputClient": {
+          "$path": "src/BikeInputClient.client.luau",
+          "$properties": {
+            "Sandboxed": false,
+            "Disabled": false
+          }
+        },
+        "BikeControllerClient": {
+          "$path": "src/BikeControllerClient.client.luau",
+          "$properties": {
+            "Sandboxed": false,
+            "Disabled": false
+          }
+        }
+      }
+    },
+    "BikeMountServer": {
+      "$path": "src/BikeMountServer.server.luau",
+      "$properties": {
+        "Sandboxed": false,
+        "Disabled": false
+      }
+    }
+  }
+}
