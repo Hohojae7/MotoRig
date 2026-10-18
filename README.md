@@ -11,29 +11,33 @@
 
 ### A physics-based raycast motorcycle chassis for Roblox
 
-<!-- TODO: one bold line that sells it, e.g. what makes riding feel real -->
+<!-- TODO: one bold line that puts the physics first (real tire, suspension
+     and lean dynamics), and that it is still one drop-in model -->
 **Drop one model into your map and ride.**
 
 [![Release](https://img.shields.io/github/v/release/Hohojae7/MotoRig?label=release)](https://github.com/Hohojae7/MotoRig/releases/latest)
-[![Creator Store](https://img.shields.io/badge/Creator%20Store-coming%20soon-lightgrey)](#-quick-start)
+[![Creator Store](https://img.shields.io/badge/Creator%20Store-coming%20soon-lightgrey)](#-installation)
 [![CI](https://github.com/Hohojae7/MotoRig/actions/workflows/ci.yml/badge.svg)](https://github.com/Hohojae7/MotoRig/actions/workflows/ci.yml)
 [![License: MPL-2.0](https://img.shields.io/github/license/Hohojae7/MotoRig)](LICENSE)
 
-**[Download](https://github.com/Hohojae7/MotoRig/releases/latest) · [Creator Store](#-quick-start) · [Demo place](#-quick-start) · [Report a bug](https://github.com/Hohojae7/MotoRig/issues)**
+**[Download](https://github.com/Hohojae7/MotoRig/releases/latest) · [Creator Store](#-installation) · [Demo place](#-installation) · [Report a bug](https://github.com/Hohojae7/MotoRig/issues)**
 
-[Features](#-features) · [Quick start](#-quick-start) · [Controls](#-controls) · [Configuration](#-configuration) · [How it works](#-how-it-works) · [FAQ](#-faq)
+[Features](#-features) · [Installation](#-installation) · [Controls](#-controls) · [Configuration](#-configuration) · [How it works](#-how-it-works) · [FAQ](#-faq)
 
 </div>
 
 ---
 
 <!-- TODO: 2-3 sentence intro. What MotoRig is, who it is for (map makers),
-     and what is different from other Roblox vehicles. -->
+     and what is different from other Roblox vehicles: the physics. -->
 _Intro paragraph._
 
 ## ✨ Features
 
-<!-- TODO: 4-6 short bullets, the strongest first -->
+<!-- TODO: 4-6 short bullets, the physics first (tires, suspension, lean and
+     countersteering, engine and gearbox), then controls, cameras and the
+     exterior. Each links to its section where it helps. -->
+
 - **Feature** - one line
 - **Feature** - one line
 - **Feature** - one line
@@ -62,28 +66,17 @@ _Intro paragraph._
   </tr>
 </table>
 
-## 🚀 Quick start
+## 📦 Installation
 
-### Option 1: Download from Releases
-<!-- TODO: steps. Download MotoRig.rbxm from the latest release, drag it into Studio -->
+<!-- TODO: 4-5 steps, from src/README.luau SETUP:
+     1. Download MotoRig.rbxm from Releases (Creator Store link once issue #4 is done)
+     2. Drag it into Workspace, wheels on the ground
+     3. Play, stand next to the bike, hold E to get on
+     4. It starts in neutral: RightShift for 1st, then W -->
 1. Step
 2. Step
-
-### Option 2: Creator Store
-<!-- TODO: link once published (issue #4); Toolbox > Inventory steps like A-Chassis -->
-_Coming with v1.0.0._
-
-### Option 3: Build from source
-<!-- TODO: for developers: aftman install, rojo build / rojo serve -->
-```bash
-aftman install
-rojo build MotoRig.project.json -o MotoRig.rbxm
-```
-
-### Placing the bike
-<!-- TODO: from src/README.luau SETUP: Workspace, wheels on the ground, copies OK -->
-1. Step
-2. Step
+3. Step
+4. Step
 
 > [!IMPORTANT]
 > Do not scale the model. The physics uses its real dimensions.
@@ -111,15 +104,14 @@ _Touch controls._
 
 ## 🔧 Configuration
 
-<!-- TODO: how to open BikeConfig, then the common settings -->
+<!-- TODO: how to open BikeConfig, then the game settings only: sound,
+     camera, dashboard, speed unit, hints, touch controls, ride prompt text,
+     engine start and stop. Physics values go to "Tuning the physics". -->
 | Setting | Default | Description |
 |---|---|---|
 | `Sound.Profile` | `"YamahaR1"` | Engine sound |
 | `Dashboard.SpeedUnit` | `"km/h"` | `"km/h"`, `"mph"` or `"studs/s"` |
 | ... | | |
-
-> [!TIP]
-> The physics values work together. Change one at a time and ride after each change.
 
 ## 🎨 Custom exterior
 
@@ -184,6 +176,16 @@ F_d = \tfrac{1}{2}\,\rho\,C_d\,A\,v^2
 <!-- TODO: torque curve, centrifugal clutch, rev limiter, ABS -->
 _Text._
 
+### Tuning the physics
+<!-- TODO: the physics groups in BikeConfig (mass, suspension, tires, engine,
+     gears), what each one changes in the ride -->
+| Group | What it changes |
+|---|---|
+| ... | |
+
+> [!TIP]
+> The physics values work together. Change one at a time and ride after each change.
+
 ## 🌍 Using it in your map
 
 <!-- TODO: from src/README.luau IN A MAP: several bikes, StreamingEnabled,
@@ -219,11 +221,24 @@ Answer.
 
 ## 💻 Development
 
-<!-- TODO: repository layout, tools, CI -->
+### Building from source
+<!-- TODO: Aftman installs the pinned tools; rojo build makes the model,
+     rojo serve syncs into Studio -->
+```bash
+aftman install
+rojo build MotoRig.project.json -o MotoRig.rbxm
+```
+
+### Repository layout
+<!-- TODO: what each folder and project file is -->
 ```text
 src/      Luau scripts
 parts/    Bike parts
 ```
+
+### Checks
+<!-- TODO: selene, stylua and what CI checks on every pull request -->
+_Text._
 
 ## 🧭 Roadmap
 
