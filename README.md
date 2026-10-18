@@ -24,9 +24,6 @@
 
 [Features](#-features) · [Quick start](#-quick-start) · [Controls](#-controls) · [Configuration](#-configuration) · [How it works](#-how-it-works) · [FAQ](#-faq)
 
-<!-- TODO: hero.gif (S-curve, chase camera) -->
-<img src="https://placehold.co/800x450?text=hero.gif" alt="MotoRig leaning through an S-curve" width="800">
-
 </div>
 
 ---
@@ -42,26 +39,26 @@ _Intro paragraph._
 - **Feature** - one line
 - **Feature** - one line
 
-<!-- GIF grid: two per row -->
+<!-- GIF grid: two per row. TODO: final captions -->
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="https://placehold.co/400x225?text=mount.gif" alt="Getting on and riding off"><br>
-      <sub><b>Hold E to ride</b></sub>
+      <img src="docs/media/hero.gif" alt="Leaning left and right through a curve"><br>
+      <sub><b>Leaning and countersteering</b></sub>
     </td>
     <td align="center" width="50%">
-      <img src="https://placehold.co/400x225?text=helmet.gif" alt="Helmet view through a curve"><br>
-      <sub><b>Chase and helmet views</b></sub>
+      <img src="docs/media/shifting.gif" alt="Shifting up through the gears"><br>
+      <sub><b>Manual 6-speed gearbox</b></sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="https://placehold.co/400x225?text=suspension.gif" alt="Suspension soaking up a landing"><br>
-      <sub><b>Real suspension and tires</b></sub>
+      <img src="docs/media/helmet.gif" alt="Helmet view while leaning"><br>
+      <sub><b>Chase and helmet views</b></sub>
     </td>
     <td align="center" width="50%">
-      <img src="https://placehold.co/400x225?text=shifting.gif" alt="Dashboard while shifting up"><br>
-      <sub><b>Manual 6-speed gearbox</b></sub>
+      <img src="docs/media/suspension.gif" alt="Riding over a speed bump"><br>
+      <sub><b>Suspension over bumps</b></sub>
     </td>
   </tr>
 </table>
@@ -92,9 +89,6 @@ rojo build MotoRig.project.json -o MotoRig.rbxm
 > [!IMPORTANT]
 > Do not scale the model. The physics uses its real dimensions.
 
-<!-- TODO: explorer.png (everything lives inside one model) -->
-<img src="https://placehold.co/360x420?text=explorer.png" alt="MotoRig in the Explorer" width="360">
-
 ## 🎮 Controls
 
 <!-- TODO: fill from src/README.luau CONTROLS -->
@@ -110,11 +104,11 @@ _Camera controls._
 
 ### Dashboard
 <!-- TODO: what the meter shows (rpm, gear, speed, red zone) and the control tiles -->
-<img src="https://placehold.co/800x450?text=dashboard.png" alt="Dashboard while riding" width="800">
+_Dashboard._
 
 ### Phones and tablets
 <!-- TODO: touch layout -->
-<img src="https://placehold.co/800x370?text=touch.png" alt="Touch controls" width="800">
+_Touch controls._
 
 ## 🔧 Configuration
 
@@ -136,6 +130,19 @@ _Camera controls._
 |---|---|
 | `Body` | the frame |
 | ... | |
+
+<!-- TODO: final caption -->
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/media/exterior-1.png" alt="MotoRig with a sport-bike shell">
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/media/exterior-2.png" alt="MotoRig with another sport-bike shell">
+    </td>
+  </tr>
+</table>
+<p align="center"><sub><b>Same chassis, two different shells</b></sub></p>
 
 ## 🔬 How it works
 
