@@ -1,7 +1,6 @@
 <!--
-  README skeleton. Every "TODO" comment is a note for writing; comments are
-  invisible on GitHub. Placeholder images (placehold.co) are replaced with the
-  real GIFs and screenshots later.
+  README draft. Every "TODO" comment is a note for writing; comments are
+  invisible on GitHub.
 -->
 
 <div align="center">
@@ -43,21 +42,21 @@ _Intro paragraph._
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="docs/media/hero.gif" alt="Leaning left and right through a curve"><br>
+      <img src="docs/media/hero.gif" alt="Leaning left and right through a curve" width="100%"><br>
       <sub><b>Leaning and countersteering</b></sub>
     </td>
     <td align="center" width="50%">
-      <img src="docs/media/shifting.gif" alt="Shifting up through the gears"><br>
+      <img src="docs/media/shifting.gif" alt="Shifting up through the gears" width="100%"><br>
       <sub><b>Manual 6-speed gearbox</b></sub>
     </td>
   </tr>
   <tr>
     <td align="center" width="50%">
-      <img src="docs/media/helmet.gif" alt="Helmet view while leaning"><br>
+      <img src="docs/media/helmet.gif" alt="Helmet view while leaning" width="100%"><br>
       <sub><b>Chase and helmet views</b></sub>
     </td>
     <td align="center" width="50%">
-      <img src="docs/media/suspension.gif" alt="Riding over a speed bump"><br>
+      <img src="docs/media/suspension.gif" alt="Riding over a speed bump" width="100%"><br>
       <sub><b>Suspension over bumps</b></sub>
     </td>
   </tr>
@@ -124,25 +123,26 @@ _Touch controls._
 
 ## 🎨 Custom exterior
 
-<!-- TODO: the Exterior model and its groups (Body, Steering, Fork, FrontWheel,
-     RearWheel, Swingarm), the Axle and Pivot attachments. Screenshot after issue #5. -->
-| Group | Moves with |
-|---|---|
-| `Body` | the frame |
-| ... | |
-
-<!-- TODO: final caption -->
+<!-- TODO: one sentence: MotoRig ships as a bare frame; a body shell is a Model
+     named Exterior inside the bike and does not change the physics.
+     Say whether the shells below are included or only examples. -->
 <table>
   <tr>
     <td align="center" width="50%">
-      <img src="docs/media/exterior-1.png" alt="MotoRig with a sport-bike shell">
+      <img src="docs/media/exterior-1.png" alt="MotoRig with a sport-bike shell" width="100%">
     </td>
     <td align="center" width="50%">
-      <img src="docs/media/exterior-2.png" alt="MotoRig with another sport-bike shell">
+      <img src="docs/media/exterior-2.png" alt="MotoRig with another sport-bike shell" width="100%">
     </td>
   </tr>
 </table>
 <p align="center"><sub><b>Same chassis, two different shells</b></sub></p>
+
+<!-- TODO: the groups inside Exterior and the Axle and Pivot attachments -->
+| Group | Moves with |
+|---|---|
+| `Body` | the frame |
+| ... | |
 
 ## 🔬 How it works
 
