@@ -93,16 +93,6 @@ Gears go 1-N-2-3-4-5-6. To reverse, stop in neutral and hold the brake for a sec
 
 Zooming all the way in also gives the helmet view.
 
-### Dashboard
-
-The meter at the bottom right shows rpm, gear and speed. The gear reads green in neutral, amber in reverse and red in the red zone (from 11,000 rpm), the cue to shift up. ABS and traction control have their own lights.
-
-The tiles at the bottom left show the controls. The one the bike needs next lights up in blue: start the engine, leave neutral or shift up.
-
-### Phones and tablets
-
-Touch controls replace the tiles on phones and tablets. Your left thumb leans by dragging left or right and shifts with the buttons above; your right thumb holds the throttle or the brake. Engine, neutral, view, look back and get off sit along the top, and the meter moves to the top right.
-
 ## 🔧 Configuration
 
 Every setting lives in the `BikeConfig` ModuleScript inside the bike. Open it in Studio, change a value and press Play. Each bike has its own `BikeConfig`, so bikes in the same map can be set up differently.
