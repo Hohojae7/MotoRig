@@ -10,7 +10,7 @@
 [![CI](https://github.com/Hohojae7/MotoRig/actions/workflows/ci.yml/badge.svg)](https://github.com/Hohojae7/MotoRig/actions/workflows/ci.yml)
 [![License: MPL-2.0](https://img.shields.io/github/license/Hohojae7/MotoRig)](LICENSE)
 
-**[Download](https://github.com/Hohojae7/MotoRig/releases/latest) · [Report a bug](https://github.com/Hohojae7/MotoRig/issues)**
+**[Download](https://github.com/Hohojae7/MotoRig/releases/latest) · [How it works](#-how-it-works) · [Report a bug](https://github.com/Hohojae7/MotoRig/issues)**
 
 [Features](#-features) · [Installation](#-installation) · [Controls](#-controls) · [Configuration](#-configuration)
 
@@ -115,7 +115,7 @@ These are the settings you are most likely to change:
 | `Engine.StopOnDismount` | `true` | Stops the engine when the rider gets off |
 | `Diagnostics.Enabled` | `false` | `true` prints development info to the Output |
 
-The rest of `BikeConfig` is the physics: mass, suspension, tires, engine and gears. Change one value at a time and ride after each change.
+The rest of `BikeConfig` is the physics, covered in [Tuning the physics](#tuning-the-physics).
 
 ## 🎨 Custom exterior
 
@@ -146,6 +146,189 @@ To fit your own shell:
 - Put it in a Model named `Exterior` inside the bike, split into `Body`, `Steering`, `Fork`, `FrontWheel`, `RearWheel` and `Swingarm` models.
 - Add an `Axle` attachment at each wheel center and a `Pivot` attachment on the swingarm pivot. The shell is moved, never resized, so keep the axles 5.30 studs apart.
 - The shell is only visual: it has no mass and no collision, so the bike rides the same.
+
+## 🔬 How it works
+
+The chassis is one rigid body and the wheels are raycast. Every physics frame, before Roblox runs its own solver, MotoRig finds the ground under each tire, solves the suspension, tires, engine and brakes together, and updates the lean. Each part below gives the equation and the Luau that implements it.
+
+### Tire contact
+
+Each tire is a torus: spherecasts trace its round profile, so the wheel rolls over curbs instead of catching on a single ray.
+
+```lua
+for _, offset in wheel.samples do
+    local hit = self.world:Spherecast(
+        origin + arcRotation:VectorToWorldSpace(offset),
+        wheel.profileRadius,
+        direction,
+        self.raycastParams
+    )
+```
+
+<sub><code>BikeDynamics:_probe</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
+
+### Suspension
+
+The spring is chosen so each corner rides at a set frequency, with the tire as a second spring in series.
+
+```math
+k_\text{ride} = m\,(2\pi f)^2, \qquad k_\text{spring} = \frac{k_\text{ride}\,k_\text{tire}}{k_\text{tire} - k_\text{ride}}
+```
+
+where $m$ is the mass on that wheel, $f$ the ride frequency and $k_\text{tire}$ the tire's stiffness.
+
+```lua
+local omega = 2 * math.pi * wheel.suspension.Frequency
+local rideRate = math.min(cornerMass * omega * omega, tireRate * 0.9)
+local verticalSpringRate = rideRate * tireRate / (tireRate - rideRate)
+```
+
+<sub><code>BikeDynamics:_refreshMassProperties</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
+
+### Tires
+
+Grip follows Pacejka's Magic Formula, for both the lateral and the longitudinal force.
+
+```math
+F(x) = D \sin\!\Big(C \arctan\big(Bx - E\,(Bx - \arctan Bx)\big)\Big)
+```
+
+where $x$ is the slip and $B$, $C$, $D$, $E$ are the stiffness, shape, peak and curvature factors. Past the peak the force falls off and the tire slides.
+
+```lua
+local function tireCurveValue(curve, slip)
+    local x = curve.stiffness * slip
+
+    return math.sin(curve.shape * math.atan(x - curve.curvature * (x - math.atan(x))))
+end
+```
+
+<sub><code>tireCurveValue</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a> (peak normalized to 1)</sub>
+
+&nbsp;
+
+### Lean and countersteering
+
+The lean follows the bicycle roll equation about the tire contact line.
+
+```math
+I\,\ddot{\varphi} = m g h \sin\varphi - m h\,a_\text{lat}\cos\varphi + M_\text{gyro}
+```
+
+```math
+a_\text{lat} = \frac{(v^2 + b\,\dot{v})\tan\delta + b\,v\,\dot{\delta}\,\sec^2\delta}{L}
+```
+
+where $\varphi$ is the lean, $h$ the height of the center of mass, $\delta$ the steering angle, $L$ the wheelbase and $b$ the distance from the rear contact to the center of mass. The $\dot{\delta}$ term is the countersteer: steering away from a turn first tips the bike into it.
+
+```lua
+lateralAcceleration = (
+    (speedSquared + toCenter * acceleration) * tanSteer
+    + toCenter * speed * steerRate * (1 + tanSteer * tanSteer)
+) / wheelbase
+
+-- I roll'' = m g h sin(roll) - m h a_lat cos(roll) + gyroscopic
+moment = gravityMoment * math.sin(roll)
+    - mass * height * lateralAcceleration * math.cos(roll)
+    + gyroscopicMoment
+```
+
+<sub><code>BikeDynamics:_updateRider</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
+
+### Air drag
+
+```math
+\vec{F}_d = -\frac{1}{2}\,\rho\,C_d\,A\,|\vec{v}_\text{air}|\,\vec{v}_\text{air}, \qquad \vec{v}_\text{air} = \vec{v} - \vec{v}_\text{wind}
+```
+
+where $\rho$ is the map's air density, $C_d$ the drag coefficient and $A$ the frontal area of the bike and rider. The wind is the map's `GlobalWind`.
+
+```lua
+local airVelocity = velocity - self.wind
+local drag = airVelocity
+    * (-0.5 * self.airDensity * config.Aero.DragCoefficient * self.frontalArea * airVelocity.Magnitude)
+```
+
+<sub><code>BikeDynamics:step</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
+
+### Engine and clutch
+
+The centrifugal clutch's shoes press outward with a force that grows with the square of engine speed, so the torque it can carry rises from engagement to lock-up.
+
+```math
+T_\text{clutch} = T_\text{max} \cdot \mathrm{clamp}\left(\frac{n^2 - n_\text{engage}^2}{n_\text{lock}^2 - n_\text{engage}^2},\ 0,\ 1\right)
+```
+
+where $n$ is the engine speed in rpm.
+
+```lua
+local fraction = clamp((rpm * rpm - engage * engage) / (lock * lock - engage * engage), 0, 1)
+
+return fraction * drivetrain.ClutchCapacityRatio * Powertrain.peakTorque(drivetrain)
+```
+
+<sub><code>Powertrain.clutchCapacity</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
+
+### Engine sound
+
+An engine's pitch follows its firing frequency, so each recorded loop is played faster or slower to match the engine speed.
+
+```math
+f = \frac{\text{rpm}}{60} \cdot \frac{n_\text{cyl}}{2}, \qquad \text{speed} = \frac{\text{rpm}_\text{sound}}{\text{rpm}_\text{recorded}}
+```
+
+```lua
+layer.speed = math.clamp(soundRPM / layer.loop.RecordedRPM, MIN_SPEED, MAX_SPEED)
+```
+
+<sub><code>BikeSound:update</code> in <a href="src/BikeSound.luau">src/BikeSound.luau</a></sub>
+
+&nbsp;
+
+### Built on Roblox
+
+| Roblox API | What MotoRig uses it for |
+|---|---|
+| `WorldRoot:Spherecast` | Finding the ground under each tire's round profile |
+| `VectorForce`, `Torque` | Putting the tire, suspension and drag forces on the chassis |
+| `AlignOrientation` | Holding the chassis at the solved lean |
+| `RunService.PreSimulation` | Stepping the bike every physics frame, before Roblox's solver |
+| `BasePart:SetNetworkOwner` | Letting the rider's client run the bike, so it answers input without network delay |
+| `UnreliableRemoteEvent` | Sending the bike's visual state and engine speed to other players |
+| `ProximityPrompt` | The ride prompt |
+| `Script.RunContext = Client` | Client scripts that run from inside the model, so nothing goes in StarterPlayer |
+| `TremoloSoundEffect`, `EqualizerSoundEffect` | The rev limiter's stutter and the tone of the exhaust pops |
+| `Workspace.Gravity`, `AirDensity`, `GlobalWind` | The map's own gravity, air and wind in the physics |
+
+&nbsp;
+
+### Tuning the physics
+
+The physics settings in `BikeConfig`, by group:
+
+| Group | What it changes | Key settings |
+|---|---|---|
+| `Mass` | Chassis weight, center of mass and wheel weight | `BallastMass`, `WheelDensity` |
+| `Suspension` | How soft the bike rides and how fast it settles, front and rear | `Frequency`, `SagRatio`, `BumpDampingRatio`, `ReboundDampingRatio` |
+| `Tire` | Grip and how the tire lets go, combined with the surface's own friction | `Friction`, `CorneringStiffness`, `LateralShape` |
+| `Aero` | Air drag, and with it the top speed | `DragCoefficient` |
+| `Steering` | Steering lock and how quickly the input follows the keys | `MaxGroundSteerAngle`, `InputResponse` |
+| `Lean` | How far and how quickly the bike leans | `MaxLeanAngle`, `MaxYawRate`, `RiderRollFrequency` |
+| `Drivetrain` | Engine torque, gearing, clutch and traction control | `TorqueCurve`, `GearRatios`, `FinalDriveRatio`, `RevLimitRPM` |
+| `Brakes` | Braking strength and ABS | `MaxDeceleration`, `ABS` |
+
+> [!TIP]
+> The physics values work together. Change one at a time and ride after each change.
 
 ## 📄 License
 
