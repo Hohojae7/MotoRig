@@ -117,6 +117,36 @@ These are the settings you are most likely to change:
 
 The rest of `BikeConfig` is the physics: mass, suspension, tires, engine and gears. Change one value at a time and ride after each change.
 
+## 🎨 Custom exterior
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/media/exterior-1.png" alt="MotoRig with an example sport-bike shell" width="100%">
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/media/exterior-2.png" alt="MotoRig with another example sport-bike shell" width="100%">
+    </td>
+  </tr>
+</table>
+<p align="center"><sub><b>Example shells on the same chassis (not included)</b></sub></p>
+
+| Dimension | Studs | Meters |
+|---|---|---|
+| Front wheel diameter | 2.08 | 0.58 |
+| Front wheel width | 0.38 | 0.11 |
+| Rear wheel diameter | 2.25 | 0.63 |
+| Rear wheel width | 0.52 | 0.15 |
+| Wheelbase (axle to axle) | 5.30 | 1.48 |
+| Seat height (top of the seat) | 3.44 | 0.96 |
+
+<sub>1 stud = 0.28 m, the scale the bike is built to.</sub>
+
+To fit your own shell:
+- Put it in a Model named `Exterior` inside the bike, split into `Body`, `Steering`, `Fork`, `FrontWheel`, `RearWheel` and `Swingarm` models.
+- Add an `Axle` attachment at each wheel center and a `Pivot` attachment on the swingarm pivot. The shell is moved, never resized, so keep the axles 5.30 studs apart.
+- The shell is only visual: it has no mass and no collision, so the bike rides the same.
+
 ## 📄 License
 
 MotoRig is licensed under the [Mozilla Public License 2.0](LICENSE).
