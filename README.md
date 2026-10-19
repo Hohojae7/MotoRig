@@ -1,0 +1,107 @@
+<div align="center">
+
+# MotoRig
+
+### A physics-based raycast motorcycle chassis for Roblox
+
+**Real tire, suspension and lean physics in one drop-in model.**
+
+[![Release](https://img.shields.io/github/v/release/Hohojae7/MotoRig?label=release)](https://github.com/Hohojae7/MotoRig/releases/latest)
+[![CI](https://github.com/Hohojae7/MotoRig/actions/workflows/ci.yml/badge.svg)](https://github.com/Hohojae7/MotoRig/actions/workflows/ci.yml)
+[![License: MPL-2.0](https://img.shields.io/github/license/Hohojae7/MotoRig)](LICENSE)
+
+**[Download](https://github.com/Hohojae7/MotoRig/releases/latest) · [Report a bug](https://github.com/Hohojae7/MotoRig/issues)**
+
+[Features](#-features) · [Installation](#-installation) · [Controls](#-controls)
+
+</div>
+
+---
+
+MotoRig is a motorcycle you can drop into any Roblox map and ride. Its motion comes from a physics model of the tires, suspension, engine and the rider's balance, solved every frame. Everything else it needs, from controls and cameras to the dashboard and engine sound, lives inside the same model.
+
+## ✨ Features
+
+- **Pacejka tires:** Magic Formula grip curves with combined slip, camber thrust and load sensitivity, so the bike slides when it runs out of grip
+- **Raycast suspension:** spring-damper fork and swingarm set by ride frequency, with round tire profiles that roll over curbs and bumps
+- **Real lean and countersteering:** the lean follows the bicycle roll equation, and the rider countersteers into every turn
+- **Engine and 6-speed gearbox:** torque curve, centrifugal clutch, rev limiter, reverse, ABS and traction control
+- **Keyboard and touch:** with chase and helmet cameras and a dashboard
+- **Drop-in:** one self-contained model; run several bikes, use StreamingEnabled, or fit your own body shell
+
+<!-- GIF grid: two per row -->
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/media/hero.gif" alt="Leaning left and right through a curve" width="100%"><br>
+      <sub><b>Leaning and countersteering</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/media/shifting.gif" alt="Shifting up through the gears" width="100%"><br>
+      <sub><b>Manual 6-speed gearbox</b></sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/media/helmet.gif" alt="Helmet view while leaning" width="100%"><br>
+      <sub><b>Chase and helmet views</b></sub>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/media/suspension.gif" alt="Riding over a speed bump" width="100%"><br>
+      <sub><b>Suspension over bumps</b></sub>
+    </td>
+  </tr>
+</table>
+
+## 📦 Installation
+
+<!-- TODO: add the Creator Store steps once issue #4 is done -->
+1. Download `MotoRig.rbxm` from the [latest release](https://github.com/Hohojae7/MotoRig/releases/latest).
+2. Drag it into Studio and place it in `Workspace` with the wheels on the ground. Copies work too.
+3. Press **Play**, walk up to the bike and hold **E** to get on.
+4. The ride starts in neutral. Press **RightShift** for 1st gear, then **W** to ride off.
+
+> [!IMPORTANT]
+> Do not scale the model. The physics uses its real dimensions.
+
+## 🎮 Controls
+
+| Action | Keyboard | Touch |
+|---|---|---|
+| Get on | Hold `E` | Hold the prompt |
+| Throttle | `W` | THROTTLE |
+| Brake (front and rear) | `S` | BRAKE |
+| Rear brake | `B` | |
+| Lean | `A` / `D` | Drag on the left side |
+| Gear up | `LeftShift` | SHIFT UP |
+| Gear down | `RightShift` | SHIFT DOWN |
+| Neutral | `N` | NEUTRAL |
+| Engine on / off | `F` | ENGINE |
+| Get off | `Space` | GET OFF |
+
+Gears go 1-N-2-3-4-5-6. To reverse, stop in neutral and hold the brake for a second until `R` shows. In reverse, the throttle stops the bike and then puts it in 1st.
+
+### Camera
+
+| Action | Keyboard and mouse | Touch |
+|---|---|---|
+| Look around | Drag with the right mouse button | Drag outside the lean area |
+| Zoom | Mouse wheel or `I` / `O` | |
+| Chase / helmet view | `V` | VIEW |
+| Look back (hold) | `C` | BACK |
+
+Zooming all the way in also gives the helmet view.
+
+### Dashboard
+
+The meter at the bottom right shows rpm, gear and speed. The gear reads green in neutral, amber in reverse and red in the red zone (from 11,000 rpm), the cue to shift up. ABS and traction control have their own lights.
+
+The tiles at the bottom left show the controls. The one the bike needs next lights up in blue: start the engine, leave neutral or shift up.
+
+### Phones and tablets
+
+Touch controls replace the tiles on phones and tablets. Your left thumb leans by dragging left or right and shifts with the buttons above; your right thumb holds the throttle or the brake. Engine, neutral, view, look back and get off sit along the top, and the meter moves to the top right.
+
+## 📄 License
+
+MotoRig is licensed under the [Mozilla Public License 2.0](LICENSE).
