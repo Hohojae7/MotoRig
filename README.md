@@ -167,6 +167,8 @@ for _, offset in wheel.samples do
 
 <sub><code>BikeDynamics:_probe</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
 
+&nbsp;
+
 ### Suspension
 
 The spring is chosen so each corner rides at a set frequency, with the tire as a second spring in series.
@@ -184,6 +186,8 @@ local verticalSpringRate = rideRate * tireRate / (tireRate - rideRate)
 ```
 
 <sub><code>BikeDynamics:_refreshMassProperties</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
 
 ### Tires
 
@@ -204,6 +208,8 @@ end
 ```
 
 <sub><code>tireCurveValue</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a> (peak normalized to 1)</sub>
+
+&nbsp;
 
 ### Lean and countersteering
 
@@ -233,6 +239,8 @@ moment = gravityMoment * math.sin(roll)
 
 <sub><code>BikeDynamics:_updateRider</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
 
+&nbsp;
+
 ### Air drag
 
 ```math
@@ -248,6 +256,8 @@ local drag = airVelocity
 ```
 
 <sub><code>BikeDynamics:step</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
 
 ### Engine and clutch
 
@@ -266,6 +276,8 @@ return fraction * drivetrain.ClutchCapacityRatio * Powertrain.peakTorque(drivetr
 ```
 
 <sub><code>Powertrain.clutchCapacity</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
+
+&nbsp;
 
 ### Engine sound
 
