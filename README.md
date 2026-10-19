@@ -30,13 +30,12 @@ MotoRig is a motorcycle you can drop into any Roblox map and ride. Its motion co
 
 ## ✨ Features
 
-<!-- TODO: 4-6 short bullets, the physics first (tires, suspension, lean and
-     countersteering, engine and gearbox), then controls, cameras and the
-     exterior. Each links to its section where it helps. -->
-
-- **Feature** - one line
-- **Feature** - one line
-- **Feature** - one line
+- **Pacejka tires:** Magic Formula grip curves with combined slip, camber thrust and load sensitivity, so the bike slides when it runs out of grip
+- **Raycast suspension:** spring-damper fork and swingarm set by ride frequency, with round tire profiles that roll over curbs and bumps
+- **Real lean and countersteering:** the lean follows the bicycle roll equation, and the rider countersteers into every turn
+- **Engine and 6-speed gearbox:** torque curve, centrifugal clutch, rev limiter, reverse, ABS and traction control
+- **Every input:** keyboard, gamepad and touch, with chase and helmet cameras and a dashboard
+- **Drop-in:** one self-contained model; run several bikes, use StreamingEnabled, or fit your own body shell
 
 <!-- GIF grid: two per row. TODO: final captions -->
 <table>
