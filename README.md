@@ -63,15 +63,11 @@ MotoRig is a motorcycle you can drop into any Roblox map and ride. Its motion co
 
 ## 📦 Installation
 
-<!-- TODO: 4-5 steps, from src/README.luau SETUP:
-     1. Download MotoRig.rbxm from Releases (Creator Store link once issue #4 is done)
-     2. Drag it into Workspace, wheels on the ground
-     3. Play, stand next to the bike, hold E to get on
-     4. It starts in neutral: RightShift for 1st, then W -->
-1. Step
-2. Step
-3. Step
-4. Step
+<!-- TODO: add the Creator Store steps once issue #4 is done -->
+1. Download `MotoRig.rbxm` from the [latest release](https://github.com/Hohojae7/MotoRig/releases/latest).
+2. Drag it into Studio and place it in `Workspace` with the wheels on the ground. Copies work too.
+3. Press **Play**, walk up to the bike and hold **E** (gamepad **X**) to get on.
+4. The ride starts in neutral. Press **RightShift** (gamepad **L1**) for 1st gear, then **W** (**R2**) to ride off.
 
 > [!IMPORTANT]
 > Do not scale the model. The physics uses its real dimensions.
