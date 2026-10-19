@@ -155,9 +155,6 @@ The chassis is one rigid body and the wheels are raycast. Every physics frame, b
 
 Each tire is a torus, a round cross-section swept around the wheel. Spherecasts placed on its core circle find the ground, so the wheel meets curbs with its real profile.
 
-<details>
-<summary>Luau</summary>
-
 ```lua
 for _, offset in wheel.samples do
     local hit = self.world:Spherecast(
@@ -169,7 +166,6 @@ for _, offset in wheel.samples do
 ```
 
 <sub><code>BikeDynamics:_probe</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
-</details>
 
 ### Suspension
 
@@ -181,9 +177,6 @@ k_\text{ride} = m\,(2\pi f)^2, \qquad k_\text{spring} = \frac{k_\text{ride}\,k_\
 
 where $m$ is the mass on that wheel, $f$ the ride frequency and $k_\text{tire}$ the tire's stiffness.
 
-<details>
-<summary>Luau</summary>
-
 ```lua
 local omega = 2 * math.pi * wheel.suspension.Frequency
 local rideRate = math.min(cornerMass * omega * omega, tireRate * 0.9)
@@ -191,7 +184,6 @@ local verticalSpringRate = rideRate * tireRate / (tireRate - rideRate)
 ```
 
 <sub><code>BikeDynamics:_refreshMassProperties</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
-</details>
 
 ### Tires
 
@@ -203,9 +195,6 @@ F(x) = D \sin\!\Big(C \arctan\big(Bx - E\,(Bx - \arctan Bx)\big)\Big)
 
 where $x$ is the slip and $B$, $C$, $D$, $E$ are the stiffness, shape, peak and curvature factors. Past the peak the force falls off and the tire slides.
 
-<details>
-<summary>Luau</summary>
-
 ```lua
 local function tireCurveValue(curve, slip)
     local x = curve.stiffness * slip
@@ -215,7 +204,6 @@ end
 ```
 
 <sub><code>tireCurveValue</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a> (peak normalized to 1)</sub>
-</details>
 
 ### Lean and countersteering
 
@@ -231,9 +219,6 @@ a_\text{lat} = \frac{(v^2 + b\,\dot{v})\tan\delta + b\,v\,\dot{\delta}\,\sec^2\d
 
 where $\varphi$ is the lean, $h$ the height of the center of mass, $\delta$ the steering angle, $L$ the wheelbase and $b$ the distance from the rear contact to the center of mass. The $\dot{\delta}$ term is the countersteer: steering away from a turn first tips the bike into it.
 
-<details>
-<summary>Luau</summary>
-
 ```lua
 lateralAcceleration = (
     (speedSquared + toCenter * acceleration) * tanSteer
@@ -247,18 +232,14 @@ moment = gravityMoment * math.sin(roll)
 ```
 
 <sub><code>BikeDynamics:_updateRider</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
-</details>
 
 ### Air drag
 
 ```math
-\vec{F}_d = -\tfrac{1}{2}\,\rho\,C_d\,A\,\lvert\vec{v}_\text{air}\rvert\,\vec{v}_\text{air}, \qquad \vec{v}_\text{air} = \vec{v} - \vec{v}_\text{wind}
+\vec{F}_d = -\frac{1}{2}\,\rho\,C_d\,A\,|\vec{v}_\text{air}|\,\vec{v}_\text{air}, \qquad \vec{v}_\text{air} = \vec{v} - \vec{v}_\text{wind}
 ```
 
 where $\rho$ is the map's air density, $C_d$ the drag coefficient and $A$ the frontal area of the bike and rider. The wind is the map's `GlobalWind`.
-
-<details>
-<summary>Luau</summary>
 
 ```lua
 local airVelocity = velocity - self.wind
@@ -267,20 +248,16 @@ local drag = airVelocity
 ```
 
 <sub><code>BikeDynamics:step</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
-</details>
 
 ### Engine and clutch
 
 The centrifugal clutch's shoes press outward with a force that grows with the square of engine speed, so the torque it can carry rises from engagement to lock-up.
 
 ```math
-T_\text{clutch} = T_\text{max} \cdot \operatorname{clamp}\!\left(\frac{n^2 - n_\text{engage}^2}{n_\text{lock}^2 - n_\text{engage}^2},\ 0,\ 1\right)
+T_\text{clutch} = T_\text{max} \cdot \mathrm{clamp}\left(\frac{n^2 - n_\text{engage}^2}{n_\text{lock}^2 - n_\text{engage}^2},\ 0,\ 1\right)
 ```
 
 where $n$ is the engine speed in rpm.
-
-<details>
-<summary>Luau</summary>
 
 ```lua
 local fraction = clamp((rpm * rpm - engage * engage) / (lock * lock - engage * engage), 0, 1)
@@ -289,7 +266,6 @@ return fraction * drivetrain.ClutchCapacityRatio * Powertrain.peakTorque(drivetr
 ```
 
 <sub><code>Powertrain.clutchCapacity</code> in <a href="src/BikeDynamics.luau">src/BikeDynamics.luau</a></sub>
-</details>
 
 ### Engine sound
 
@@ -299,15 +275,11 @@ An engine's pitch follows its firing frequency, so each recorded loop is played 
 f = \frac{\text{rpm}}{60} \cdot \frac{n_\text{cyl}}{2}, \qquad \text{speed} = \frac{\text{rpm}_\text{sound}}{\text{rpm}_\text{recorded}}
 ```
 
-<details>
-<summary>Luau</summary>
-
 ```lua
 layer.speed = math.clamp(soundRPM / layer.loop.RecordedRPM, MIN_SPEED, MAX_SPEED)
 ```
 
 <sub><code>BikeSound:update</code> in <a href="src/BikeSound.luau">src/BikeSound.luau</a></sub>
-</details>
 
 ## 📄 License
 
