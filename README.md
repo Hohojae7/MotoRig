@@ -11,9 +11,7 @@
 
 ### A physics-based raycast motorcycle chassis for Roblox
 
-<!-- TODO: one bold line that puts the physics first (real tire, suspension
-     and lean dynamics), and that it is still one drop-in model -->
-**Drop one model into your map and ride.**
+**Real tire, suspension and lean physics in one drop-in model.**
 
 [![Release](https://img.shields.io/github/v/release/Hohojae7/MotoRig?label=release)](https://github.com/Hohojae7/MotoRig/releases/latest)
 [![Creator Store](https://img.shields.io/badge/Creator%20Store-coming%20soon-lightgrey)](#-installation)
