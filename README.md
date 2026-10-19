@@ -34,7 +34,7 @@ MotoRig is a motorcycle you can drop into any Roblox map and ride. Its motion co
 - **Raycast suspension:** spring-damper fork and swingarm set by ride frequency, with round tire profiles that roll over curbs and bumps
 - **Real lean and countersteering:** the lean follows the bicycle roll equation, and the rider countersteers into every turn
 - **Engine and 6-speed gearbox:** torque curve, centrifugal clutch, rev limiter, reverse, ABS and traction control
-- **Every input:** keyboard, gamepad and touch, with chase and helmet cameras and a dashboard
+- **Keyboard and touch:** with chase and helmet cameras and a dashboard
 - **Drop-in:** one self-contained model; run several bikes, use StreamingEnabled, or fit your own body shell
 
 <!-- GIF grid: two per row. TODO: final captions -->
@@ -66,32 +66,49 @@ MotoRig is a motorcycle you can drop into any Roblox map and ride. Its motion co
 <!-- TODO: add the Creator Store steps once issue #4 is done -->
 1. Download `MotoRig.rbxm` from the [latest release](https://github.com/Hohojae7/MotoRig/releases/latest).
 2. Drag it into Studio and place it in `Workspace` with the wheels on the ground. Copies work too.
-3. Press **Play**, walk up to the bike and hold **E** (gamepad **X**) to get on.
-4. The ride starts in neutral. Press **RightShift** (gamepad **L1**) for 1st gear, then **W** (**R2**) to ride off.
+3. Press **Play**, walk up to the bike and hold **E** to get on.
+4. The ride starts in neutral. Press **RightShift** for 1st gear, then **W** to ride off.
 
 > [!IMPORTANT]
 > Do not scale the model. The physics uses its real dimensions.
 
 ## 🎮 Controls
 
-<!-- TODO: fill from src/README.luau CONTROLS -->
-| Action | Keyboard | Gamepad | Touch |
-|---|---|---|---|
-| Throttle | `W` | `R2` | THROTTLE |
-| Brake | `S` | `L2` | BRAKE |
-| ... | | | |
+| Action | Keyboard | Touch |
+|---|---|---|
+| Get on | Hold `E` | Hold the prompt |
+| Throttle | `W` | THROTTLE |
+| Brake (front and rear) | `S` | BRAKE |
+| Rear brake | `B` | |
+| Lean | `A` / `D` | Drag on the left side |
+| Gear up | `LeftShift` | SHIFT UP |
+| Gear down | `RightShift` | SHIFT DOWN |
+| Neutral | `N` | NEUTRAL |
+| Engine on / off | `F` | ENGINE |
+| Get off | `Space` | GET OFF |
+
+Gears go 1-N-2-3-4-5-6. To reverse, stop in neutral and hold the brake for a second until `R` shows. In reverse, the throttle stops the bike and then puts it in 1st.
 
 ### Camera
-<!-- TODO: chase / helmet view, look around, look back, zoom -->
-_Camera controls._
+
+| Action | Keyboard and mouse | Touch |
+|---|---|---|
+| Look around | Drag with the right mouse button | Drag outside the lean area |
+| Zoom | Mouse wheel or `I` / `O` | |
+| Chase / helmet view | `V` | VIEW |
+| Look back (hold) | `C` | BACK |
+
+Zooming all the way in also gives the helmet view.
 
 ### Dashboard
-<!-- TODO: what the meter shows (rpm, gear, speed, red zone) and the control tiles -->
-_Dashboard._
+
+The meter at the bottom right shows rpm, gear and speed. The gear reads green in neutral, amber in reverse and red in the red zone (from 11,000 rpm), the cue to shift up. ABS and traction control have their own lights.
+
+The tiles at the bottom left show the controls. The one the bike needs next lights up in blue: start the engine, leave neutral or shift up.
 
 ### Phones and tablets
-<!-- TODO: touch layout -->
-_Touch controls._
+
+Touch controls replace the tiles on phones and tablets. Your left thumb leans by dragging left or right and shifts with the buttons above; your right thumb holds the throttle or the brake. Engine, neutral, view, look back and get off sit along the top, and the meter moves to the top right.
 
 ## 🔧 Configuration
 
