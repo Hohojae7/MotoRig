@@ -293,6 +293,23 @@ layer.speed = math.clamp(soundRPM / layer.loop.RecordedRPM, MIN_SPEED, MAX_SPEED
 
 <sub><code>BikeSound:update</code> in <a href="src/BikeSound.luau">src/BikeSound.luau</a></sub>
 
+&nbsp;
+
+### Built on Roblox
+
+| Roblox API | What MotoRig uses it for |
+|---|---|
+| `WorldRoot:Spherecast` | Finding the ground under each tire's round profile |
+| `VectorForce`, `Torque` | Putting the tire, suspension and drag forces on the chassis |
+| `AlignOrientation` | Holding the chassis at the solved lean |
+| `RunService.PreSimulation` | Stepping the bike every physics frame, before Roblox's solver |
+| `BasePart:SetNetworkOwner` | Letting the rider's client run the bike, so it answers input without network delay |
+| `UnreliableRemoteEvent` | Sending the bike's visual state and engine speed to other players |
+| `ProximityPrompt` | The ride prompt |
+| `Script.RunContext = Client` | Client scripts that run from inside the model, so nothing goes in StarterPlayer |
+| `TremoloSoundEffect`, `EqualizerSoundEffect` | The rev limiter's stutter and the tone of the exhaust pops |
+| `Workspace.Gravity`, `AirDensity`, `GlobalWind` | The map's own gravity, air and wind in the physics |
+
 ## 📄 License
 
 MotoRig is licensed under the [Mozilla Public License 2.0](LICENSE).
