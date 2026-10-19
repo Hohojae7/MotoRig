@@ -153,7 +153,7 @@ The chassis is one rigid body and the wheels are raycast. Every physics frame, b
 
 ### Tire contact
 
-Each tire is a torus, a round cross-section swept around the wheel. Spherecasts placed on its core circle find the ground, so the wheel meets curbs with its real profile.
+Each tire is a torus: spherecasts trace its round profile, so the wheel rolls over curbs instead of catching on a single ray.
 
 ```lua
 for _, offset in wheel.samples do
