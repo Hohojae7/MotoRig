@@ -115,7 +115,7 @@ These are the settings you are most likely to change:
 | `Engine.StopOnDismount` | `true` | Stops the engine when the rider gets off |
 | `Diagnostics.Enabled` | `false` | `true` prints development info to the Output |
 
-The rest of `BikeConfig` is the physics: mass, suspension, tires, engine and gears. Change one value at a time and ride after each change.
+The rest of `BikeConfig` is the physics, covered in [Tuning the physics](#tuning-the-physics).
 
 ## 🎨 Custom exterior
 
@@ -309,6 +309,26 @@ layer.speed = math.clamp(soundRPM / layer.loop.RecordedRPM, MIN_SPEED, MAX_SPEED
 | `Script.RunContext = Client` | Client scripts that run from inside the model, so nothing goes in StarterPlayer |
 | `TremoloSoundEffect`, `EqualizerSoundEffect` | The rev limiter's stutter and the tone of the exhaust pops |
 | `Workspace.Gravity`, `AirDensity`, `GlobalWind` | The map's own gravity, air and wind in the physics |
+
+&nbsp;
+
+### Tuning the physics
+
+The physics settings in `BikeConfig`, by group:
+
+| Group | What it changes | Key settings |
+|---|---|---|
+| `Mass` | Chassis weight, center of mass and wheel weight | `BallastMass`, `WheelDensity` |
+| `Suspension` | How soft the bike rides and how fast it settles, front and rear | `Frequency`, `SagRatio`, `BumpDampingRatio`, `ReboundDampingRatio` |
+| `Tire` | Grip and how the tire lets go, combined with the surface's own friction | `Friction`, `CorneringStiffness`, `LateralShape` |
+| `Aero` | Air drag, and with it the top speed | `DragCoefficient` |
+| `Steering` | Steering lock and how quickly the input follows the keys | `MaxGroundSteerAngle`, `InputResponse` |
+| `Lean` | How far and how quickly the bike leans | `MaxLeanAngle`, `MaxYawRate`, `RiderRollFrequency` |
+| `Drivetrain` | Engine torque, gearing, clutch and traction control | `TorqueCurve`, `GearRatios`, `FinalDriveRatio`, `RevLimitRPM` |
+| `Brakes` | Braking strength and ABS | `MaxDeceleration`, `ABS` |
+
+> [!TIP]
+> The physics values work together. Change one at a time and ride after each change.
 
 ## 📄 License
 
