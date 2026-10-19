@@ -26,9 +26,7 @@
 
 ---
 
-<!-- TODO: 2-3 sentence intro. What MotoRig is, who it is for (map makers),
-     and what is different from other Roblox vehicles: the physics. -->
-_Intro paragraph._
+MotoRig is a motorcycle you can drop into any Roblox map and ride. Its motion comes from a physics model of the tires, suspension, engine and the rider's balance, solved every frame. Everything else it needs, from controls and cameras to the dashboard and engine sound, lives inside the same model.
 
 ## ✨ Features
 
