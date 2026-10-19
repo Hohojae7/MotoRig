@@ -12,7 +12,7 @@
 
 **[Download](https://github.com/Hohojae7/MotoRig/releases/latest) · [Report a bug](https://github.com/Hohojae7/MotoRig/issues)**
 
-[Features](#-features) · [Installation](#-installation) · [Controls](#-controls)
+[Features](#-features) · [Installation](#-installation) · [Controls](#-controls) · [Configuration](#-configuration)
 
 </div>
 
@@ -102,6 +102,30 @@ The tiles at the bottom left show the controls. The one the bike needs next ligh
 ### Phones and tablets
 
 Touch controls replace the tiles on phones and tablets. Your left thumb leans by dragging left or right and shifts with the buttons above; your right thumb holds the throttle or the brake. Engine, neutral, view, look back and get off sit along the top, and the meter moves to the top right.
+
+## 🔧 Configuration
+
+Every setting lives in the `BikeConfig` ModuleScript inside the bike. Open it in Studio, change a value and press Play. Each bike has its own `BikeConfig`, so bikes in the same map can be set up differently.
+
+These are the settings you are most likely to change:
+
+| Setting | Default | What it does |
+|---|---|---|
+| `Sound.Enabled` | `true` | `false` turns the engine sound off |
+| `Sound.Profile` | see `BikeConfig` | Which recorded engine plays, from the list in `Sound.Profiles` |
+| `Camera.Enabled` | `true` | `false` leaves the camera to Roblox while riding |
+| `Dashboard.Enabled` | `true` | `false` hides the meter and the control tiles |
+| `Dashboard.SpeedUnit` | `"km/h"` | `"km/h"`, `"mph"` or `"studs/s"` |
+| `Dashboard.RedZoneRPM` | `11000` | Where the meter's red zone starts and the gear turns red |
+| `Dashboard.Hints` | `true` | `false` hides the control tiles at the bottom left |
+| `Dashboard.TouchControls` | `true` | `false` hides the touch buttons, for maps with their own |
+| `Mount.ActionText` | `"Ride"` | The action text on the ride prompt |
+| `Mount.ObjectText` | `"MotoRig"` | The name on the ride prompt |
+| `Engine.AutoStartOnMount` | `true` | Starts the engine when the rider gets on |
+| `Engine.StopOnDismount` | `true` | Stops the engine when the rider gets off |
+| `Diagnostics.Enabled` | `false` | `true` prints development info to the Output |
+
+The rest of `BikeConfig` is the physics: mass, suspension, tires, engine and gears. Change one value at a time and ride after each change.
 
 ## 📄 License
 
