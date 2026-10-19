@@ -142,6 +142,11 @@ The rest of `BikeConfig` is the physics: mass, suspension, tires, engine and gea
 
 <sub>1 stud = 0.28 m, the scale the bike is built to.</sub>
 
+To fit your own shell:
+- Put it in a Model named `Exterior` inside the bike, split into `Body`, `Steering`, `Fork`, `FrontWheel`, `RearWheel` and `Swingarm` models.
+- Add an `Axle` attachment at each wheel center and a `Pivot` attachment on the swingarm pivot. The shell is moved, never resized, so keep the axles 5.30 studs apart.
+- The shell is only visual: it has no mass and no collision, so the bike rides the same.
+
 ## 📄 License
 
 MotoRig is licensed under the [Mozilla Public License 2.0](LICENSE).
