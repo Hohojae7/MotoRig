@@ -339,6 +339,12 @@ The physics settings in `BikeConfig`, by group:
 - **Shift Lock:** off while riding, since it shares the gear keys, and back on when you get off.
 - **Who is riding:** the bike's `BikeDriverUserId` attribute is the rider's UserId, or `0` when nobody rides.
 
+## 🚧 Known limitations
+
+- **No falling over:** the bike cannot crash or fall over. This is by design for now.
+- **High steps:** a step higher than the wheel axle stops the bike like a wall.
+- **Shells do not collide:** a body shell is only visual, so pressed against a wall it may sink in slightly.
+
 ## 📄 License
 
 MotoRig is licensed under the [Mozilla Public License 2.0](LICENSE).
