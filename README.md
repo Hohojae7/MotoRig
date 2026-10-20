@@ -330,6 +330,15 @@ The physics settings in `BikeConfig`, by group:
 > [!TIP]
 > The physics values work together. Change one at a time and ride after each change.
 
+## 🌍 Using it in your map
+
+- **Several bikes:** each one runs on its own scripts, so they never interfere.
+- **StreamingEnabled:** a far bike appears as you come close, and its wheels and sound start again.
+- **Your map's physics:** Gravity, AirDensity, GlobalWind and terrain and material friction are used as they are, so ice and grass change the grip. With other gravity, ride height and braking follow it.
+- **Parked bikes:** a bike nobody rides holds its parking brake, so it stays put on slopes.
+- **Shift Lock:** off while riding, since it shares the gear keys, and back on when you get off.
+- **Who is riding:** the bike's `BikeDriverUserId` attribute is the rider's UserId, or `0` when nobody rides.
+
 ## 📄 License
 
 MotoRig is licensed under the [Mozilla Public License 2.0](LICENSE).
